@@ -9,7 +9,7 @@ namespace ResturantAPI.API.Configuration
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProCare", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Resturant App", Version = "v1" });
 
                 //Enable JWT Bearer Token in Swagger
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -22,19 +22,19 @@ namespace ResturantAPI.API.Configuration
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
 

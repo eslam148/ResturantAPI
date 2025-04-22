@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using ResturantAPI.Domain.Entities;
+using ResturantAPI.Services.Enums;
 using ResturantAPI.Services.IService;
+using ResturantAPI.Services.Model;
 using ResturantAPI.Services.Service;
 
 namespace ResturantAPI.API.Controllers
@@ -23,10 +26,25 @@ namespace ResturantAPI.API.Controllers
 
         }
         [HttpGet("Get")]
-        public IActionResult GetMovies()
+        public ActionResult<Response<List<Movies>>> GetMovies()
         {
-            var movieList = _movieService.GetAllMovies();
-            return Ok(movieList);
+            try
+            {
+
+                return _movieService.GetAllMovies();
+            }
+            catch (Exception ex)
+            {
+                Response<List<Movies>> response = new Response<List<Movies>>
+                {
+                    Data =null,
+                    Status = ResponseStatus.BadRequest,
+                    InternalMessage = ex.Message,
+
+                };
+                return response;
+            }
+          
         }
 
         [HttpGet(Name = "GetWeatherForecast")]

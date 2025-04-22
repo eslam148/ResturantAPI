@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ResturantAPI.Domain.Entities;
+using ResturantAPI.Services.Model;
 
 namespace ResturantAPI.Services.IService
 {public interface IMovieService
     {
-        List<Movies> GetAllMovies();
+        Response<List<Movies>> GetAllMovies();
 
     }
 }

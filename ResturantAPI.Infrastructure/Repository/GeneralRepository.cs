@@ -134,7 +134,16 @@ namespace ResturantAPI.Infrastructure.Repository
 
         public IQueryable<T> FilterAll(Expression<Func<T, bool>> predicate, bool track = false)
         {
-            return _dbSet.Where(predicate);
+            if (track)
+            {
+                return _dbSet.Where(predicate);
+
+            }
+            else
+            {
+                return _dbSet.Where(predicate).AsNoTracking();
+
+            }
         }
 
         public IQueryable<T> FilterAll(Expression<Func<T, bool>> predicate, string[] include, bool track = false)
