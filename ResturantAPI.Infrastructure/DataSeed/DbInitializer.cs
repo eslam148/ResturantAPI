@@ -99,7 +99,7 @@ namespace ResturantAPI.Infrastructure.Context
 
         private async Task SeedIdentityDataAsync()
         {
-            string[] roles = { "Sabreen", "Delievary", "Farah", "Doctor" };
+            string[] roles = { "Admin", "Delievary", "Resturant", "Customer" };
 
             foreach (var role in roles)
             {
