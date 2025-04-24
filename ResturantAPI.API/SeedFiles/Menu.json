@@ -1,0 +1,47 @@
+[
+    {
+        "Id": 1,
+        "Title": "Lunch Specials",
+        "Description": "Midday meals",
+        "RestaurantId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 2,
+        "Title": "Dinner Specials",
+        "Description": "Evening meals",
+        "RestaurantId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 3,
+        "Title": "Breakfast Specials",
+        "Description": "Morning meals",
+        "RestaurantId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 4,
+        "Title": "Brunch Specials",
+        "Description": "Late morning meals",
+        "RestaurantId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 5,
+        "Title": "Snack Specials",
+        "Description": "Light meals",
+        "RestaurantId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 6,
+        "Title": "Dessert Specials",
+        "Description": "Sweet treats",
+        "RestaurantId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    }
+
+
+    
+]

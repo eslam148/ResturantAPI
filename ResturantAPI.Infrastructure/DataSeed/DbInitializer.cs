@@ -9,6 +9,7 @@ using System.IO.Abstractions;
 using ResturantAPI.Infrastructure.DataSeed;
 using System.Security.Cryptography;
 using ResturantAPI.Domain.Entities;
+using ResturantAPI.Domain;
 
 
 namespace ResturantAPI.Infrastructure.Context
@@ -35,33 +36,40 @@ namespace ResturantAPI.Infrastructure.Context
 
         public void SeedData()
         {
-           // SeedDbSet(_db, _db.TypeOfMeals, Path.Combine("Seed", "typeOfMeals.json"));
-            //SeedDbSet(_db, _db.Allarges, Path.Combine("Seed", "allarge.json"));
-            //SeedDbSet(_db, _db.Categories, Path.Combine("Seed", "categories.json"));
-            //SeedDbSet(_db, _db.Cuisines, Path.Combine("Seed", "cuisines.json"));
-            //SeedDbSet(_db, _db.Currencies, Path.Combine("Seed", "currencies.json"));
-            //SeedDbSet(_db, _db.DeliveryTypes, Path.Combine("Seed", "deliveryTypes.json"));
-            //SeedDbSet(_db, _db.Ingredients, Path.Combine("Seed", "ingredients.json"));
-            //SeedDbSet(_db, _db.LikeTypes, Path.Combine("Seed", "likeTypes.json"));
-            //SeedDbSet(_db, _db.PaymentTypes, Path.Combine("Seed", "paymentTypes.json"));
+            var basePath = AppContext.BaseDirectory;
             SeedIdentityDataAsync().Wait();
+
+            SeedDbSet(_db, _db.Addresses, Path.Combine("SeedFiles", "Address.json"));
+            SeedDbSet(_db, _db.Restaurants, Path.Combine("SeedFiles", "Restaurant.json"));
+            SeedDbSet(_db, _db.Customers, Path.Combine("SeedFiles", "Customer.json"));
+            SeedDbSet(_db, _db.Deliveries, Path.Combine("SeedFiles", "Delivery.json"));
+            SeedDbSet(_db, _db.Menus, Path.Combine("SeedFiles", "Menu.json"));
+            SeedDbSet(_db, _db.MenuItems, Path.Combine("SeedFiles", "MenuItem.json"));
+            SeedDbSet(_db, _db.Orders, Path.Combine("SeedFiles", "Order.json"));
+            SeedDbSet(_db, _db.OrderItems, Path.Combine("SeedFiles", "OrderItem.json"));
+            SeedDbSet(_db, _db.Payments, Path.Combine("SeedFiles", "Payment.json"));
             _db.SaveChanges();
         }
-
-        private void SeedDbSet<T>(DatabaseContext db, DbSet<T> dbSet, string file) where T : class, ISeedableEntity
+        private void SeedDbSet<T>(DatabaseContext db, DbSet<T> dbSet, string file) where T : Entity<int>
         {
-            //if (!_fileSystem.File.Exists(file))
-            //    return;
-
             var content = _fileSystem.File.ReadAllText(file, Encoding.UTF8);
-            var hash = GetHash(content);
-
-            //if (!CompareAndUpdateFileHash(db, file, hash))
-            //{
-                var values = DeserializeJson<T>(content);
-                UpdateSeedData(db, dbSet, values);
-          //  }
+            var values = DeserializeJson<T>(content);
+            UpdateSeedData(db, dbSet, values);
         }
+        //private void SeedDbSet<T>(DatabaseContext db, DbSet<T> dbSet, string file) where T : class, BaseEntity
+        //{
+        //    //if (!_fileSystem.File.Exists(file))
+        //    //    return;
+
+        //    var content = _fileSystem.File.ReadAllText(file, Encoding.UTF8);
+        //    var hash = GetHash(content);
+
+        //    //if (!CompareAndUpdateFileHash(db, file, hash))
+        //    //{
+        //        var values = DeserializeJson<T>(content);
+        //        UpdateSeedData(db, dbSet, values);
+        //  //  }
+        //}
 
         private static byte[] GetHash(string content)
         {
@@ -83,19 +91,35 @@ namespace ResturantAPI.Infrastructure.Context
 
             return JsonSerializer.Deserialize<IEnumerable<T>>(content, options) ?? empty;
         }
-
-        private static void UpdateSeedData<T>(DatabaseContext db, DbSet<T> dbSet, IEnumerable<T> values) where T : class, ISeedableEntity
+        private static void UpdateSeedData<T>(DatabaseContext db, DbSet<T> dbSet, IEnumerable<T> values) where T : Entity<int>
         {
             foreach (var value in values)
             {
-                var exisitingEntity = dbSet.FirstOrDefault(x => x.Id == value.Id);
+                var existingEntity = dbSet.Find(value.Id);
 
-                if (exisitingEntity is null)
+                if (existingEntity == null)
+                {
                     db.Add(value);
+                }
                 else
-                    db.Entry(exisitingEntity).CurrentValues.SetValues(value);
+                {
+                    db.Entry(existingEntity).CurrentValues.SetValues(value);
+                }
             }
+            db.SaveChanges();
         }
+        //private static void UpdateSeedData<T>(DatabaseContext db, DbSet<T> dbSet, IEnumerable<T> values) where T : class, Entity
+        //{
+        //    foreach (var value in values)
+        //    {
+        //        var exisitingEntity = dbSet.Find(value.Id);
+
+        //        if (exisitingEntity is null)
+        //            db.Add(value);
+        //        else
+        //            db.Entry(exisitingEntity).CurrentValues.SetValues(value);
+        //    }
+        //}
 
         private async Task SeedIdentityDataAsync()
         {

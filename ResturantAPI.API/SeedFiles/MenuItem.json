@@ -43,7 +43,7 @@
         "Description": "Delicious mozzarella",
         "Price": 50.0,
         "ImageUrl": "https://example.com/pizza.jpg",
-        "MenuId": 3,
+        "MenuId": 2,
         "CreatedAt": "2025-04-23T10:00:00"
     }
 ]
