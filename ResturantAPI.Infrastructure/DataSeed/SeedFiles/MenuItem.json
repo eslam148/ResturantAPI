@@ -1,0 +1,49 @@
+[
+    {
+        "Id": 1,
+        "Title": "Cheese Pizza",
+        "Description": "Delicious mozzarella",
+        "Price": 50.0,
+        "ImageUrl": "https://example.com/pizza.jpg",
+        "MenuId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+
+
+    {
+        "Id": 2,
+        "Title": "Cheese Pizza",
+        "Description": "Delicious mozzarella",
+        "Price": 50.0,
+        "ImageUrl": "https://example.com/pizza.jpg",
+        "MenuId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 3,
+        "Title": "Cheese Pizza",
+        "Description": "Delicious mozzarella",
+        "Price": 50.0,
+        "ImageUrl": "https://example.com/pizza.jpg",
+        "MenuId": 2,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 4,
+        "Title": "Cheese Pizza",
+        "Description": "Delicious mozzarella",
+        "Price": 50.0,
+        "ImageUrl": "https://example.com/pizza.jpg",
+        "MenuId": 2,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 5,
+        "Title": "Cheese Pizza",
+        "Description": "Delicious mozzarella",
+        "Price": 50.0,
+        "ImageUrl": "https://example.com/pizza.jpg",
+        "MenuId": 3,
+        "CreatedAt": "2025-04-23T10:00:00"
+    }
+]

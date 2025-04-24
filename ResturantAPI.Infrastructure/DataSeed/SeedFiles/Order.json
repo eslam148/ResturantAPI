@@ -1,0 +1,17 @@
+[
+  {
+    "Id": 1,
+    "OrderDate": "2025-04-23T12:00:00",
+    "TotalAmount": 50.0,
+    "Status": 1,
+    "paymentMethod": 1,
+    "IsPayed": true,
+    "PaymentTransctionId": "txn12345",
+    "customerId": 1,
+    "RestaurantId": 1,
+    "AddressId": 1,
+    "DeliveryId": 1,
+    "ApplicationUserId": "user-1",
+    "CreatedAt": "2025-04-23T12:00:00"
+  }
+]

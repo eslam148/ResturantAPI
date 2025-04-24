@@ -30,7 +30,7 @@ namespace ResturantAPI.API
 
             builder.Services.ConfigureSwagger(builder.Configuration);
             var app = builder.Build();
-//            app.InitializeDb();
+            //app.InitializeDb();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

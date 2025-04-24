@@ -1,0 +1,9 @@
+[
+  {
+    "Id": 1,
+    "CreditCardNumber": "4111111111111111",
+    "ExpirationDate": "12/26",
+    "CustomerId": 1,
+    "CreatedAt": "2025-04-23T10:00:00"
+  }
+]

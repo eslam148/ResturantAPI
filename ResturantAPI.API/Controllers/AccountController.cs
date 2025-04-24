@@ -16,21 +16,9 @@ namespace ResturantAPI.API.Controllers
         [HttpPost("login")]
         public async Task<Response<LoginResponseDTO>> Login(LoginDTO loginDTO)
         {
-            try
-            {
-                return await authServices.Login(loginDTO);
-            }
-            catch (Exception ex)
-            {
-                return  new Response<LoginResponseDTO>
-                {
-                    Data = null,
-                    Status = ResponseStatus.InternalServerError,
-                    Message = "An error occurred while processing your request.",
-                    InternalMessage = ex.Message
-                };
-            }
              
+                return await authServices.Login(loginDTO);
+
         }
     }
 }

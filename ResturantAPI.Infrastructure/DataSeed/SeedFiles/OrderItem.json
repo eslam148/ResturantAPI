@@ -1,0 +1,11 @@
+[
+  {
+    "Id": 1,
+    "Quantity": 1,
+    "UnitPrice": 50.0,
+    "TotalPrice": 50.0,
+    "OrderId": 1,
+    "MenuItemId": 1,
+    "CreatedAt": "2025-04-23T12:01:00"
+  }
+]

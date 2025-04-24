@@ -63,22 +63,10 @@ namespace ResturantAPI.Services.Service
 
         public async Task<Response<LoginResponseDTO>> Login(LoginDTO loginDTO)
         {
-            // Check if the user exists
-            ApplicationUser user = await userManager.FindByEmailAsync(loginDTO.Email);
-            if (user == null)
+            try
             {
-                return new Response<LoginResponseDTO>
-                {
-                    Data = null,
-                    Status = ResponseStatus.NotFound,
-                    Message = "User not found"
-                };
-            }
-            // Check if the password is correct
-            bool result = await userManager.CheckPasswordAsync(user, loginDTO.Password);
-            if (result)
-            {
-                
+                // Check if the user exists
+                ApplicationUser user = await userManager.FindByEmailAsync(loginDTO.Email);
                 if (user == null)
                 {
                     return new Response<LoginResponseDTO>
@@ -88,28 +76,54 @@ namespace ResturantAPI.Services.Service
                         Message = "User not found"
                     };
                 }
-                string token = await userManager.GenerateTokenAsync(user, config);
+                // Check if the password is correct
+                bool result = await userManager.CheckPasswordAsync(user, loginDTO.Password);
+                if (result)
+                {
+
+                    if (user == null)
+                    {
+                        return new Response<LoginResponseDTO>
+                        {
+                            Data = null,
+                            Status = ResponseStatus.NotFound,
+                            Message = "User not found"
+                        };
+                    }
+                    string token = await userManager.GenerateTokenAsync(user, config);
+                    return new Response<LoginResponseDTO>
+                    {
+                        Data = new LoginResponseDTO
+                        {
+                            Token = token,
+                            Name = user.Name,
+                            Email = user.Email,
+                            PhoneNumber = user.PhoneNumber
+                        },
+                        Status = ResponseStatus.Success,
+                        Message = "Login Success"
+                    };
+                }
+
                 return new Response<LoginResponseDTO>
                 {
-                    Data = new LoginResponseDTO
-                    {
-                        Token = token,
-                        Name = user.Name,
-                        Email = user.Email,
-                        PhoneNumber = user.PhoneNumber
-                    },
-                    Status = ResponseStatus.Success,
-                    Message = "Login Success"
+                    Data = null,
+                    Status = ResponseStatus.BadRequest,
+                    Message = "Invalid Eamil Or password",
+
+                };
+            }
+            catch(Exception ex)
+            {
+                return new Response<LoginResponseDTO>
+                {
+                    Data = null,
+                    Status = ResponseStatus.InternalServerError,
+                    Message = "An error occurred during login",
+                    InternalMessage = ex.Message
                 };
             }
 
-            return new Response<LoginResponseDTO>
-            {
-                Data = null,
-                Status = ResponseStatus.BadRequest,
-                Message = "Invalid Eamil Or password",    
-
-            };
 
         }
         public Task<string> RefreshToken(string token, string refreshToken)

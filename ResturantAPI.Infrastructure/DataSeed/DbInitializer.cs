@@ -109,13 +109,16 @@ namespace ResturantAPI.Infrastructure.Context
                 }
             }
 
-            var adminEmail = "admin@example.com";
+            // Admin
+            var adminEmail = "admin1@example.com";
             var adminUser = await _userManager.FindByEmailAsync(adminEmail);
 
             if (adminUser == null)
             {
                 adminUser = new ApplicationUser
                 {
+                    Id = "267ca861-4093-4692-ae35-942d9995b170",
+                    Name = "Admin",
                     UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true
@@ -125,11 +128,80 @@ namespace ResturantAPI.Infrastructure.Context
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(adminUser, "Doctor");
+                    await _userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+            }
+
+            // Delievary
+            var deliveryEmail = "Delievary@example.com";
+            var deliveryUser = await _userManager.FindByEmailAsync(deliveryEmail);
+
+            if (deliveryUser == null)
+            {
+                deliveryUser = new ApplicationUser
+                {
+                    Id = "0c5a0be0-aa43-4cea-9875-154f9a1ccb57",
+                    Name = "Delievary",
+                    UserName = deliveryEmail,
+                    Email = deliveryEmail,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(deliveryUser, "Admin@123");
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(deliveryUser, "Delievary");
+                }
+            }
+
+            // Resturant
+            var resturantEmail = "Resturant@example.com";
+            var resturantUser = await _userManager.FindByEmailAsync(resturantEmail);
+
+            if (resturantUser == null)
+            {
+                resturantUser = new ApplicationUser
+                {
+                    Id = "438d2f1a-ba84-47a7-9f00-54752f9c1afa",
+                    Name = "Resturant",
+                    UserName = resturantEmail,
+                    Email = resturantEmail,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(resturantUser, "Admin@123");
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(resturantUser, "Resturant");
+                }
+            }
+
+            // Customer
+            var customerEmail = "Customer@example.com";
+            var customerUser = await _userManager.FindByEmailAsync(customerEmail);
+
+            if (customerUser == null)
+            {
+                customerUser = new ApplicationUser
+                {
+                    Id= "4afa8048-9a2a-42ba-b997-c15b344570a4",
+                    Name = "Customer",
+                    UserName = customerEmail,
+                    Email = customerEmail,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(customerUser, "Admin@123");
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(customerUser, "Customer");
                 }
             }
         }
-        
+
 
 
 
