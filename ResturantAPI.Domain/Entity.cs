@@ -22,4 +22,9 @@
 
         public DateTime? CreatedAt { get; set; }
     }
+
+    public class BaseEntity:Entity<int>
+    {
+        
+    }
 }

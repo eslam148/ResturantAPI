@@ -12,8 +12,8 @@ using ResturantAPI.Infrastructure.Context;
 namespace ResturantAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250422155927_init2")]
-    partial class init2
+    [Migration("20250424095033_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,7 +200,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.ApplicationUser", b =>
@@ -291,7 +291,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Delivery", b =>
@@ -317,7 +317,7 @@ namespace ResturantAPI.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Delivery");
+                    b.ToTable("Deliveries");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Menu", b =>
@@ -346,7 +346,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Menu");
+                    b.ToTable("Menus");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.MenuItem", b =>
@@ -382,7 +382,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("MenuItem");
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Order", b =>
@@ -442,7 +442,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("customerId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.OrderItem", b =>
@@ -477,7 +477,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Payment", b =>
@@ -506,7 +506,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Restaurant", b =>
@@ -544,7 +544,7 @@ namespace ResturantAPI.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Restaurant");
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

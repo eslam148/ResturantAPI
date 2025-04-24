@@ -1,0 +1,24 @@
+[
+    {
+        "Id": 1,
+        "City": "Cairo",
+        "Country": "Egypt",
+        "Street": "Tahrir St.",
+        "Longitude": 31.2357,
+        "Latitude": 30.0444,
+        "UserId": "4afa8048-9a2a-42ba-b997-c15b344570a4",
+        "CustomerId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    },
+    {
+        "Id": 1,
+        "City": "Cairo",
+        "Country": "Egypt",
+        "Street": "Tahrir St.",
+        "Longitude": 31.2357,
+        "Latitude": 30.0444,
+        "UserId": "4afa8048-9a2a-42ba-b997-c15b344570a4",
+        "CustomerId": 1,
+        "CreatedAt": "2025-04-23T10:00:00"
+    }
+]
