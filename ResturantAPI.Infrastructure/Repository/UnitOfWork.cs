@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
 
@@ -11,9 +12,7 @@ namespace ResturantAPI.Infrastructure.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
-        //private IUserRepository _user;
-        //private IRepository<ServiceCategory, int> _serviceCategories;
-        //private IRepository<SubCategory, int> _subCategories;
+      
 
         public UnitOfWork(DatabaseContext context)
         {
@@ -21,43 +20,45 @@ namespace ResturantAPI.Infrastructure.Repository
         }
 
 
-        //public IRepository<ServiceCategory, int> ServiceCategories
-        //{
-        //    get
-        //    {
-        //        if (_serviceCategories is null)
-        //        {
-        //            _serviceCategories = new Repository<ServiceCategory, int>(_context);
-        //        }
-        //        return _serviceCategories;
-        //    }
-        //}
+       
+        private IGeneralRepository<Restaurant, int> restaurant;
+        public IGeneralRepository<Restaurant, int> Restaurant
+        {
+            get
+            {
+                if (restaurant is null)
+                {
+                    restaurant = new GeneralRepository<Restaurant, int>(_context);
+                }
+                return restaurant;
+            }
+        }
+        private IGeneralRepository<Customer, int> customer;
+        public IGeneralRepository<Customer, int> Customer
+        {
+            get
+            {
+                if (customer is null)
+                {
+                    customer = new GeneralRepository<Customer, int>(_context);
+                }
+                return customer;
+            }
+        }
+        private IGeneralRepository<Delivery, int> delivery;
+        public IGeneralRepository<Delivery, int> Delivery
+        {
+            get
+            {
+                if (delivery is null)
+                {
+                    delivery = new GeneralRepository<Delivery, int>(_context);
+                }
+                return delivery;
+            }
+        }
 
-        //public IUserRepository Users
-        //{
-        //    get
-        //    {
-        //        if (_user is null)
-        //        {
-        //            _user = new UserRepository(_context);
-        //        }
-        //        return _user;
-        //    }
-        //}
-
-       // public IRepository<SubCategory, int> SUbCategories
-        //{
-        //    get
-        //    {
-        //        if (_subCategories is null)
-        //        {
-        //            _subCategories = new Repository<SubCategory, int>(_context);
-        //        }
-        //        return _subCategories;
-        //    }
-        //}
-
-
+     
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

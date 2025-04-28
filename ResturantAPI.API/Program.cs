@@ -11,6 +11,7 @@ using ResturantAPI.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using ResturantAPI.Infrastructure.DataSeed;
+using ResturantAPI.Services.AuthHelper;
 namespace ResturantAPI.API
 {
     public class Program
@@ -30,14 +31,15 @@ namespace ResturantAPI.API
 
             builder.Services.ConfigureSwagger(builder.Configuration);
             var app = builder.Build();
-            app.InitializeDb();
+            JwtTokenExtensions.config = builder.Configuration;
+            //  app.InitializeDb();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
+            //// Configure the HTTP request pipeline.
+            //if (app.Environment.IsDevelopment())
+            //{
+            app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+          //  }
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAllOrigins");
