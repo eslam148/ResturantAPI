@@ -455,6 +455,21 @@ namespace ResturantAPI.Services.Service
         {
             throw new NotImplementedException();
         }
+
+        public Task<Response<bool>> ResetPasswordAsync(string Email, string password, string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Response<object>> IAuthServices.GetUserProfileAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Response<bool>> UpdateUserProfileAsync(string userId, string name, string phoneNumber, string email)
+        {
+            throw new NotImplementedException();
+        }
     }
     
 }
