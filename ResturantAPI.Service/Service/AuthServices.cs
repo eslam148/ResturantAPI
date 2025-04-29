@@ -12,7 +12,7 @@ using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Model;
  using ResturantAPI.Services.AuthHelper;
 using ResturantAPI.Domain.Interface;
-namespace ResturantAPI.Services.Service
+ namespace ResturantAPI.Services.Service
 {
     public class AuthServices(UserManager<ApplicationUser> userManager,IConfiguration config,IUnitOfWork unitOfWork ) : IAuthServices
     {
@@ -284,16 +284,27 @@ namespace ResturantAPI.Services.Service
 
         }
 
-        public Task<Response<bool>> ForgetPasswordAsync(string Email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Response<bool>> ResetPasswordAsync(string Email, string password, int OTP)
+        public async Task<Response<bool>> ForgetPasswordAsync(string Email)
         {
             try
             {
-                var user = await userManager.FindByEmailAsync(Email);
+              ApplicationUser? user = await  userManager.FindByEmailAsync(Email);
+                if(user == null)
+                {
+                    return Response<bool>.Fail("User Not Found");
+                }
+                string token =   await  userManager.GeneratePasswordResetTokenAsync(user);
+                return Response<bool>.Success(true, token);
+            } catch (Exception ex) {
+                return Response<bool>.Error("", ex.Message);
+            }
+        }
+
+        public async Task<Response<bool>> ResetPasswordAsync(ResetPasswordDTO restPasswordDTO)
+        {
+            try
+            {
+                var user = await userManager.FindByEmailAsync(restPasswordDTO.Email);
                 if (user == null)
                 {
                     return new Response<bool>
@@ -303,8 +314,8 @@ namespace ResturantAPI.Services.Service
                         Message = "User not found"
                     };
                 }
-                string token = await userManager.GeneratePasswordResetTokenAsync(user);
-                IdentityResult result = await userManager.ResetPasswordAsync(user, token, password);
+             //   string token = await userManager.GeneratePasswordResetTokenAsync(user);
+                IdentityResult result = await userManager.ResetPasswordAsync(user, restPasswordDTO.OTP, restPasswordDTO.Password);
                 if (result.Succeeded)
                 {
                     return new Response<bool>
@@ -336,12 +347,12 @@ namespace ResturantAPI.Services.Service
 
         }
 
-        public async Task<Response<bool>> ChangePasswordAsync(ChangePasswordDTO changePassword)
+        public async Task<Response<bool>> ChangePasswordAsync(string UserId,string oldPassword,string NewPassword )
         {
             try
             {
-                ApplicationUser? user = await userManager.FindByIdAsync(changePassword.UserId);
-                IdentityResult result = await userManager.ChangePasswordAsync(user, "newPassword", "oldPassword");
+                 ApplicationUser? user = await userManager.FindByIdAsync(UserId);
+                IdentityResult result = await userManager.ChangePasswordAsync(user, oldPassword, NewPassword);
                 if (result.Succeeded)
                 {
                     return new Response<bool>
@@ -402,7 +413,7 @@ namespace ResturantAPI.Services.Service
             };
         }
 
-        public async Task<Response<bool>> UpdateUserProfileAsync(string userId, UserProfileDTO userProfileDTO)
+        public async Task<Response<bool>> UpdateUserProfileAsync(string userId, UpdateUserProfileDTO userProfileDTO)
         {
 
             try
@@ -456,20 +467,14 @@ namespace ResturantAPI.Services.Service
             throw new NotImplementedException();
         }
 
-        public Task<Response<bool>> ResetPasswordAsync(string Email, string password, string token)
+        public Task<Response<bool>> ResetPasswordAsync()
         {
             throw new NotImplementedException();
         }
 
-        Task<Response<object>> IAuthServices.GetUserProfileAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public Task<Response<bool>> UpdateUserProfileAsync(string userId, string name, string phoneNumber, string email)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
     
 }

@@ -18,5 +18,6 @@ namespace ResturantAPI.Services.Model
         string InternalMessage { get; set; }
 
         T Data { get; set; }
+ 
     }
 }

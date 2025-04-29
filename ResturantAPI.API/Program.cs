@@ -44,7 +44,7 @@ namespace ResturantAPI.API
             app.UseHttpsRedirection();
             app.UseCors("AllowAllOrigins");
             app.UseAuthorization();
-
+            app.UseStaticFiles();
 
             app.MapControllers();
 

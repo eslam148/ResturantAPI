@@ -1,28 +1,60 @@
 ﻿using Microsoft.AspNetCore.Http;
+using ResturantAPI.Services.Enums;
 using ResturantAPI.Services.IService;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
+using ResturantAPI.Services.Model;
+
 namespace ResturantAPI.Services.Service
 {
     public class UploudServices : IUploudServices
     {
-        public async Task<string> UploadImageToAzureAsync(IFormFile file)
+        public async Task<Response<string>> UploadImageAsync(IFormFile file)
         {
-            //string connectionString = "DefaultEndpointsProtocol=https;AccountName=eslam123456789;AccountKey=BxCgqrKzR1m5GoMbFJNybJysiEeKHvg1YAI0Uz0eVnDQ+zd7yRQWVGI8AbkGyAZUVuVp14H6SKqX+AStcqf2Ng==;EndpointSuffix=core.windows.net";
-            //string containerName = "eslam1";
+            const long MaxFileSize = 5 * 1024 * 1024; // 5MB
+            var allowedTypes = new[] { "image/jpeg", "image/png", "application/pdf" };
+            var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
 
-            //BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
-            //await container.CreateIfNotExistsAsync(PublicAccessType.Blob); // يتيح الوصول العام للصور
+            if (file == null || file.Length == 0)
+            {
+                return Response<string>.Fail("File is empty.", ResponseStatus.BadRequest);
+            }
 
-            //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            //BlobClient blobClient = container.GetBlobClient(fileName);
+            if (file.Length > MaxFileSize)
+            {
+                return Response<string>.Fail("File too large.", ResponseStatus.BadRequest);
+            }
 
-            //using (var stream = file.OpenReadStream())
-            //{
-            //    await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
-            //}
+            if (!allowedTypes.Contains(file.ContentType))
+            {
+                return Response<string>.Fail("Only JPG, PNG, or PDF files are allowed.", ResponseStatus.BadRequest);
+            }
 
-            return "Hello"; // blobClient.Uri.ToString(); // الرابط المباشر للصورة
+            var extension = Path.GetExtension(file.FileName);
+            var newFileName = $"{Guid.NewGuid()}{extension}";
+            var fullPath = Path.Combine(uploadFolder, newFileName);
+
+            try
+            {
+                if (!Directory.Exists(uploadFolder))
+                {
+                    Directory.CreateDirectory(uploadFolder);
+                }
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var relativePath = $"/uploads/{newFileName}";
+                return Response<string>.Success(relativePath, "File uploaded successfully.");
+            }
+            catch (Exception ex)
+            {
+                 return  Response<string>.Error(
+                      message: "An unexpected error occurred while uploading the file.",
+                      internalMessage: ex.Message
+                  );
+            }
         }
+
     }
 }

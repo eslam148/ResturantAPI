@@ -18,12 +18,12 @@ namespace ResturantAPI.Services.IService
 
         Task<Response<bool>> ForgetPasswordAsync(string Email);
 
-        Task<Response<bool>> ResetPasswordAsync(string Email, string password, string token);
+        Task<Response<bool>> ResetPasswordAsync(ResetPasswordDTO restPasswordDTO);
 
-        Task<Response<bool>> ChangePasswordAsync(ChangePasswordDTO changePassword);
+        Task<Response<bool>> ChangePasswordAsync(string UserId, string oldPassword, string NewPassword);
 
-        Task<Response<object>> GetUserProfileAsync(string userId);
-        Task<Response<bool>> UpdateUserProfileAsync(string userId, string name, string phoneNumber, string email);
+        Task<Response<UserProfileDTO>> GetUserProfileAsync(string userId);
+        Task<Response<bool>> UpdateUserProfileAsync(string userId, UpdateUserProfileDTO profileDTO);
         Task<Response<bool>> UpdateUserProfileImageAsync(string userId, string imageUrl);
 
 
