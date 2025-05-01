@@ -15,6 +15,7 @@ namespace ResturantAPI.API.Configuration
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IAuthServices, AuthServices>();
+            services.AddScoped<IAdminServices, AdminServices>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFileSystem, FileSystem>();
