@@ -13,6 +13,6 @@ namespace ResturantAPI.Services.IService
     {
         Task<Response<AdminResponseDTO>> AddRoleToUser(AdminDTO adminDTO);
         Task<IEnumerable<UserWithRoleDTO>> GetAllUsersWithRolesAsync();
-        Task<Response<PagedResult<UserDto>>> GenerateAdminReport(string FilterByRole = null, int pageSize = 10);
+        Task<Response<PagedResult<UserDto>>> ReportAboutUsers(string FilterByRole = null, int pageSize = 10);
     }
 }

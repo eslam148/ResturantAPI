@@ -55,6 +55,17 @@ namespace ResturantAPI.Services.Service
                     Message = "User added sucsessfuly"
                 };
             }
+
+            IList<string> hasrole = await userManager.GetRolesAsync(user);
+            if (hasrole.Contains("Admin"))
+            {
+                return new Response<AdminResponseDTO>
+                {
+                    Status = ResponseStatus.NotFound,
+                    Message = "User already in role"
+                };
+            }
+
             return new Response<AdminResponseDTO>
             {
                 Data = null,
@@ -111,7 +122,8 @@ namespace ResturantAPI.Services.Service
             };
         }*/
 
-        public async Task<Response<PagedResult<UserDto>>> GenerateAdminReport(string FilterByRole = null , int pageSize = 10)
+        /*GenerateAdminReport*/
+        public async Task<Response<PagedResult<UserDto>>> ReportAboutUsers(string FilterByRole = null , int pageSize = 10)
         {
             IEnumerable<UserDto> users;
             if (string.IsNullOrEmpty(FilterByRole))
@@ -135,24 +147,17 @@ namespace ResturantAPI.Services.Service
                 });
                
             }
-            
-            var pagenationResult = await GetPaginatedAsync(users, u => u.Name, pageSize);
-            var respons = new PagedResult<UserDto>
-            {
-                Items = pagenationResult.Items,
-                TotalCount = pagenationResult.TotalCount,
-                PageSize = pagenationResult.PageSize
-            };
 
+            PagedResult<UserDto> pagenationResult = await GetPaginatedAsync(users, u => u.Name, pageSize);
             return new Response<PagedResult<UserDto>>
             {
-                Data = respons,
+                Data = pagenationResult,
                 Message = "result of filter and send counter",
                 Status = ResponseStatus.Success,
             };
         }
 
-        private async Task<PagedResult<UserDto>> GetPaginatedAsync(IEnumerable<UserDto> users, Func<UserDto,object>? order = default, int pageSize = 10, int pageNumber = 1)
+        private async Task<PagedResult<UserDto>> GetPaginatedAsync(IEnumerable<UserDto> users, Func<UserDto, object>? order = default, int pageSize = 10, int pageNumber = 1)
         {
 
             int totalCount = users.Count();
@@ -167,14 +172,14 @@ namespace ResturantAPI.Services.Service
             }
 
 
-            IEnumerable<UserDto> items = users
+            IQueryable<UserDto> items = users
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize);
+                .Take(pageSize).AsQueryable();
 
 
             return new PagedResult<UserDto> 
             {
-                Items = (IQueryable<UserDto>)items,
+                Items = items,
                 TotalCount = totalCount
             };
         }

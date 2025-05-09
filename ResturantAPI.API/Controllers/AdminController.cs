@@ -36,13 +36,13 @@ namespace ResturantAPI.API.Controllers
             return await adminServices.AddRoleToUser(adminDTO);
         }
 
-        [HttpPut]
+        /*[HttpPut]
         [Route("UpdateRole")]
         public ActionResult UpdateRole(AdminDTO adminDTO)
         {
 
             return Ok();
-        }
+        }*/
 
         [HttpGet]
         [Route("GetAllUsersWithRolesAsync")]
@@ -53,11 +53,11 @@ namespace ResturantAPI.API.Controllers
         }
 
         [HttpPost]
-        [Route("GenerateAdminReport")]
+        [Route("ReportAboutUsers")]
 
-        public async Task<Response<PagedResult<UserDto>>> GenerateAdminReport(string FilterByRole = null, int pageSize = 10)
+        public async Task<Response<PagedResult<UserDto>>> ReportAboutUsers(string FilterByRole = null, int pageSize = 10)
         {
-            return await adminServices.GenerateAdminReport(FilterByRole, pageSize);
+            return await adminServices.ReportAboutUsers(FilterByRole, pageSize);
         }
     }
 }
