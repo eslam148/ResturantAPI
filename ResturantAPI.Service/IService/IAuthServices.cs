@@ -12,7 +12,22 @@ namespace ResturantAPI.Services.IService
     {
         Task<Response<bool>> Register(RegisterDTO registerDTO);
         Task<Response<LoginResponseDTO>> Login(LoginDTO loginDTO);
-        Task<string> RefreshToken(string token, string refreshToken);
-        Task<bool> RevokeToken(string token);
+        Task<Response<string>> RefreshToken(string oldToken, string refreshToken);
+      
+        Task<Response<bool>> ConfirmEmailUseingOTP(string userId, int otp);
+
+        Task<Response<bool>> ForgetPasswordAsync(string Email);
+
+        Task<Response<bool>> ResetPasswordAsync(ResetPasswordDTO restPasswordDTO);
+
+        Task<Response<bool>> ChangePasswordAsync(string UserId, string oldPassword, string NewPassword);
+
+        Task<Response<UserProfileDTO>> GetUserProfileAsync(string userId);
+        Task<Response<bool>> UpdateUserProfileAsync(string userId, UpdateUserProfileDTO profileDTO);
+        Task<Response<bool>> UpdateUserProfileImageAsync(string userId, string imageUrl);
+
+
+
+
     }
 }

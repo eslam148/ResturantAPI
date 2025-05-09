@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ namespace ResturantAPI.Services.Dtos
 {
     public class LoginDTO
     {
+        [DefaultValue("admin1@example.com")]
         public string Email { get; set; }
+        [DefaultValue("Admin@123")]
         public string Password { get; set; }
         public bool RememberMe { get; set; } = false;
     }
