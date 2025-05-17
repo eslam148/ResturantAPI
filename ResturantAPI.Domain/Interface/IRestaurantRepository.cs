@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ResturantAPI.Domain.Entities;
 
-namespace ResturantAPI.Services.IRepository
+namespace ResturantAPI.Domain.Interface
 {
-    public interface IMovieRepository
+    public interface IRestaurantRepository :IGeneralRepository<Restaurant, int >
     {
-        List<Movies> GetAllMovies();
 
     }
 }

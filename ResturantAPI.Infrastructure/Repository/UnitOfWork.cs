@@ -3,33 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
+
 
 namespace ResturantAPI.Infrastructure.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
-        //private IUserRepository _user;
-        //private IRepository<ServiceCategory, int> _serviceCategories;
-        //private IRepository<SubCategory, int> _subCategories;
+
+        private IRestaurantRepository _restaurantRepository ;
 
         public UnitOfWork(DatabaseContext context)
         {
+
             _context = context;
+        //    RestaurantRepository = new RestaurantRepository(context);
+        }
+        public IRestaurantRepository RestaurantRepository
+        {
+            get
+            {
+                if (_restaurantRepository == null)
+                {
+                    _restaurantRepository = new RestaurantRepository(_context);
+                }
+                return _restaurantRepository;
+            }
         }
 
+        //private IUserRepository _user;
+        //private IRepository<ServiceCategory, int> _serviceCategories;
+        //private IRepository<ServiceCategory, int> _serviceCategories;
 
-        //public IRepository<ServiceCategory, int> ServiceCategories
+
+        //public IGeneralRepository<Restaurant, int> Resturant => throw new NotImplementedException();
+
+
+
+        //public UnitOfWork(DatabaseContext context)
+        //{
+        //    _context = context;
+        //}
+
+
+        //public IRestaurantRepository RestaurantRepository
         //{
         //    get
         //    {
-        //        if (_serviceCategories is null)
+        //        if (_restaurantRepository is null)
         //        {
-        //            _serviceCategories = new Repository<ServiceCategory, int>(_context);
+        //            _restaurantRepository = new RestaurantRepository;
         //        }
-        //        return _serviceCategories;
+        //        return _restaurantRepository;
         //    }
         //}
 
@@ -45,7 +73,7 @@ namespace ResturantAPI.Infrastructure.Repository
         //    }
         //}
 
-       // public IRepository<SubCategory, int> SUbCategories
+        // public IRepository<SubCategory, int> SUbCategories
         //{
         //    get
         //    {

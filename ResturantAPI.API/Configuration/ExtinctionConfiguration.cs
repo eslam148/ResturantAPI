@@ -2,7 +2,6 @@
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
 using ResturantAPI.Infrastructure.Repository;
-using ResturantAPI.Services.IRepository;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Service;
 
@@ -12,9 +11,10 @@ namespace ResturantAPI.API.Configuration
     {
         public static void ConfigureExtinction(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IMovieRepository, MovieRepository>();
-            services.AddScoped<IMovieService, MovieService>();
+      
             services.AddScoped<IAuthServices, AuthServices>();
+            services.AddScoped<IRestaurantRepository  , RestaurantRepository>();
+            services.AddScoped<IRestaurantService  , RestaurantService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFileSystem, FileSystem>();

@@ -14,5 +14,6 @@ namespace ResturantAPI.Services.IService
         Task<Response<LoginResponseDTO>> Login(LoginDTO loginDTO);
         Task<string> RefreshToken(string token, string refreshToken);
         Task<bool> RevokeToken(string token);
+
     }
 }
