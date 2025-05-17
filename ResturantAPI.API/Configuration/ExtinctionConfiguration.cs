@@ -15,6 +15,7 @@ namespace ResturantAPI.API.Configuration
             services.AddScoped<IAuthServices, AuthServices>();
             services.AddScoped<IRestaurantRepository  , RestaurantRepository>();
             services.AddScoped<IRestaurantService  , RestaurantService>();
+            services.AddScoped<IUploudServices, UploudServices>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFileSystem, FileSystem>();

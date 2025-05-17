@@ -1,5 +1,8 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ResturantAPI.Domain.Entities;
+using ResturantAPI.Services.Dtos;
 using ResturantAPI.Services.Enums;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Model;
@@ -11,19 +14,21 @@ namespace ResturantAPI.API.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+       
         private readonly IMovieService _movieService;
 
         private readonly ILogger<WeatherForecastController> _logger;
+ 
+        public IUploudServices UploudServices { get; }
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMovieService movieService)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMovieService movieService , IUploudServices uploudServices,RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _movieService = movieService;
-
+            UploudServices = uploudServices;
+            _roleManager = roleManager;
         }
         [HttpGet("Get")]
         public ActionResult<Response<List<Movies>>> GetMovies()
@@ -48,15 +53,22 @@ namespace ResturantAPI.API.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public  ActionResult<object> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+
+            return "Hello World";
         }
+
+
+        //[HttpPost(Name = "Uploud")]
+        //public async Task<string> Uploud( uploudApi file)
+        //{
+        //    return await UploudServices.UploadImageToAzureAsync(file.formFilea);
+        //}
+    }
+    public class uploudApi 
+    { 
+      public   IFormFile formFilea { get; set; }
+   
     }
 }

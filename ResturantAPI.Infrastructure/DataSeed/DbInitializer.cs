@@ -95,17 +95,15 @@ namespace ResturantAPI.Infrastructure.Context
         {
             foreach (var value in values)
             {
-                var existingEntity = dbSet.Find(value.Id);
+                var exists = dbSet.AsNoTracking().Any(e => e.Id == value.Id);
 
-                if (existingEntity == null)
+                if (!exists)
                 {
-                    db.Add(value);
+                    dbSet.Add(value);
                 }
-                else
-                {
-                    db.Entry(existingEntity).CurrentValues.SetValues(value);
-                }
+               
             }
+
             db.SaveChanges();
         }
         //private static void UpdateSeedData<T>(DatabaseContext db, DbSet<T> dbSet, IEnumerable<T> values) where T : class, Entity
