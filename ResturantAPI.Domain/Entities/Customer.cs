@@ -13,12 +13,13 @@ namespace ResturantAPI.Domain.Entities
 
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public ApplicationUser user { get; set; }
+       
+        public ApplicationUser User { get; set; }
 
         public ICollection<Order> Orders { get; set; }
 
         public ICollection<Address> Addresses { get; set; }
 
-        public ICollection<Payment> payments { get; set; }
+        public ICollection<Payment> Payments { get; set; }
     }
 }

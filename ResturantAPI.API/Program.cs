@@ -11,6 +11,7 @@ using ResturantAPI.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using ResturantAPI.Infrastructure.DataSeed;
+using ResturantAPI.Services.AuthHelper;
 namespace ResturantAPI.API
 {
     public class Program
@@ -26,9 +27,12 @@ namespace ResturantAPI.API
             builder.Services.ConfigureIdentity(builder.Configuration);
             builder.Services.ConfigureExtinction(builder.Configuration);
             builder.Services.ConfigureJwtToken(builder.Configuration);
-             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.ConfigureSwagger(builder.Configuration);
+            JwtTokenExtensions.config = builder.Configuration;
             var app = builder.Build();
 //            app.InitializeDb();
 
@@ -41,8 +45,9 @@ namespace ResturantAPI.API
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAllOrigins");
+            app.UseAuthentication(); 
             app.UseAuthorization();
-
+            app.UseStaticFiles();
 
             app.MapControllers();
 

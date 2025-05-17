@@ -8,33 +8,55 @@ using ResturantAPI.Services.Enums;
 
 namespace ResturantAPI.Services.Model
 {
-    public class Response<T> : IResponse<T>
+    public sealed class Response<T> : IResponse<T>
     {
-
-        public Response()
-        {
-        }
-
-        public Response(ResponseStatus status, T data)
-        {
-            Status = status;
-            Data = data;
-        }
-
-        public Response(ResponseStatus status, string message, T data)
-        {
-            Status = status;
-            Message = message;
-            Data = data;
-        }
         public ResponseStatus Status { get; set; }
-
         public string Message { get; set; }
-
         public string InternalMessage { get; set; }
-
         public T Data { get; set; }
-
         public int SubStatus { get; set; }
+
+        public Response() { }
+
+        public Response(ResponseStatus status, T data, string message = null, string internalMessage = null, int subStatus = 0)
+        {
+            Status = status;
+            Data = data;
+            Message = message;
+            InternalMessage = internalMessage;
+            SubStatus = subStatus;
+        }
+
+
+        public static Response<T> Success(T data, string message = null)
+        {
+            return new Response<T>(ResponseStatus.Success, data, message);
+        }
+
+
+        public static Response<T> Fail(string message, ResponseStatus status = ResponseStatus.BadRequest, int subStatus = 0, string internalMessage = null)
+        {
+            return new Response<T>
+            {
+                Status = status,
+                Message = message,
+                InternalMessage = internalMessage,
+                SubStatus = subStatus,
+                Data = default
+            };
+        }
+
+
+        public static Response<T> Error(string message, string internalMessage = null, int subStatus = 0)
+        {
+            return new Response<T>
+            {
+                Status = ResponseStatus.InternalServerError,
+                Message = message,
+                InternalMessage = internalMessage,
+                SubStatus = subStatus,
+                Data = default
+            };
+        }
     }
 }

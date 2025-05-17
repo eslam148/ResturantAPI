@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
+using ResturantAPI.Services.IRepository;
+using ResturantAPI.Services.IService;
 
 namespace ResturantAPI.Infrastructure.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
+
+
+        private ICustomerRepository _customer;
         //private IUserRepository _user;
         //private IRepository<ServiceCategory, int> _serviceCategories;
         //private IRepository<SubCategory, int> _subCategories;
@@ -18,8 +25,59 @@ namespace ResturantAPI.Infrastructure.Repository
         public UnitOfWork(DatabaseContext context)
         {
             _context = context;
+
         }
 
+        public ICustomerRepository Customer
+        {
+            get
+            {
+                if(_customer is null)
+                {
+                    _customer = new CustomerRepository(_context);
+                }
+
+                return _customer;
+            }
+        }
+        private IGeneralRepository<Restaurant, int> restaurant;
+        public IGeneralRepository<Restaurant, int> Restaurant
+        {
+            get
+            {
+                if (restaurant is null)
+                {
+                    restaurant = new GeneralRepository<Restaurant, int>(_context);
+                }
+                return restaurant;
+            }
+        }
+        
+        private IGeneralRepository<Delivery, int> delivery;
+        public IGeneralRepository<Delivery, int> Delivery
+        {
+            get
+            {
+                if (delivery is null)
+                {
+                    delivery = new GeneralRepository<Delivery, int>(_context);
+                }
+                return delivery;
+            }
+        }
+
+        private IGeneralRepository<Address, int> address;
+        public IGeneralRepository<Address, int> Address
+        {
+            get
+            {
+                if (address is null)
+                {
+                    address = new GeneralRepository<Address, int>(_context);
+                }
+                return address;
+            }
+        }
 
         //public IRepository<ServiceCategory, int> ServiceCategories
         //{
@@ -45,7 +103,7 @@ namespace ResturantAPI.Infrastructure.Repository
         //    }
         //}
 
-       // public IRepository<SubCategory, int> SUbCategories
+        // public IRepository<SubCategory, int> SUbCategories
         //{
         //    get
         //    {

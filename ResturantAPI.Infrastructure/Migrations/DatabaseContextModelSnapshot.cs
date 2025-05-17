@@ -197,7 +197,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.ApplicationUser", b =>
@@ -237,14 +237,27 @@ namespace ResturantAPI.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("OTP")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OTPExpiration")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -288,7 +301,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Delivery", b =>
@@ -314,7 +327,7 @@ namespace ResturantAPI.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Delivery");
+                    b.ToTable("Deliveries");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Menu", b =>
@@ -343,7 +356,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Menu");
+                    b.ToTable("Menus");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.MenuItem", b =>
@@ -379,7 +392,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("MenuItem");
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Order", b =>
@@ -439,7 +452,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("customerId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.OrderItem", b =>
@@ -474,7 +487,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Payment", b =>
@@ -503,7 +516,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Restaurant", b =>
@@ -541,7 +554,7 @@ namespace ResturantAPI.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Restaurant");
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -612,13 +625,13 @@ namespace ResturantAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Customer", b =>
                 {
-                    b.HasOne("ResturantAPI.Domain.Entities.ApplicationUser", "user")
+                    b.HasOne("ResturantAPI.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Delivery", b =>
@@ -713,7 +726,7 @@ namespace ResturantAPI.Infrastructure.Migrations
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("ResturantAPI.Domain.Entities.Customer", "Customer")
-                        .WithMany("payments")
+                        .WithMany("Payments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -754,7 +767,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.Navigation("Orders");
 
-                    b.Navigation("payments");
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Delivery", b =>
