@@ -12,14 +12,12 @@ namespace ResturantAPI.Domain.Interface
 {
     public interface IUnitOfWork : IDisposable
     {
-         IGeneralRepository<Delivery, int> Delivery { get; }
-         IGeneralRepository<Customer, int> Customer { get; }
-         IGeneralRepository<Restaurant, int> Restaurant { get; }
+         IGeneralRepository<Delivery, int> DeliveryRepository { get; }
+          ICustomerRepository CustomerRepository { get; }
+         IGeneralRepository<Restaurant, int> RestaurantRepository { get; }
          IOrderRepository OrderRepository {  get; }
-        Task<int> SaveAsync();
-        ICustomerRepository Customer { get;}
-        IGeneralRepository<Delivery, int> Delivery { get; }
-        IGeneralRepository<Restaurant, int> Restaurant { get; }
-        IGeneralRepository<Address,int> Address { get; }
+         IGeneralRepository<Address, int> AddressRepository { get; }
+
+         Task<int> SaveAsync();
     }   
 }

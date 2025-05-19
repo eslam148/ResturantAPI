@@ -28,7 +28,7 @@ namespace ResturantAPI.Infrastructure.Repository
 
         }
 
-        public ICustomerRepository Customer
+        public ICustomerRepository CustomerRepository
         {
             get
             {
@@ -41,7 +41,7 @@ namespace ResturantAPI.Infrastructure.Repository
             }
         }
         private IGeneralRepository<Restaurant, int> restaurant;
-        public IGeneralRepository<Restaurant, int> Restaurant
+        public IGeneralRepository<Restaurant, int> RestaurantRepository
         {
             get
             {
@@ -54,7 +54,7 @@ namespace ResturantAPI.Infrastructure.Repository
         }
         
         private IGeneralRepository<Delivery, int> delivery;
-        public IGeneralRepository<Delivery, int> Delivery
+        public IGeneralRepository<Delivery, int> DeliveryRepository
         {
             get
             {
@@ -67,7 +67,7 @@ namespace ResturantAPI.Infrastructure.Repository
         }
 
         private IGeneralRepository<Address, int> address;
-        public IGeneralRepository<Address, int> Address
+        public IGeneralRepository<Address, int> AddressRepository
         {
             get
             {
@@ -80,29 +80,7 @@ namespace ResturantAPI.Infrastructure.Repository
         }
 
 
-        //public IUserRepository Users
-        //{
-        //    get
-        //    {
-        //        if (_user is null)
-        //        {
-        //            _user = new UserRepository(_context);
-        //        }
-        //        return _user;
-        //    }
-        //}
-
-        // public IRepository<SubCategory, int> SUbCategories
-        //{
-        //    get
-        //    {
-        //        if (_subCategories is null)
-        //        {
-        //            _subCategories = new Repository<SubCategory, int>(_context);
-        //        }
-        //        return _subCategories;
-        //    }
-        //}
+        private IOrderRepository Order;
 
         public IOrderRepository OrderRepository
         {
@@ -115,6 +93,8 @@ namespace ResturantAPI.Infrastructure.Repository
                 return Order;
             }
         }
+
+       
 
         public async Task<int> SaveAsync()
         {
