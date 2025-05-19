@@ -58,7 +58,19 @@ namespace ResturantAPI.Infrastructure.Repository
             }
         }
 
-     
+        private IGeneralRepository<Order, int> order;
+        public IGeneralRepository<Order, int> Order
+        {
+            get
+            {
+                if (order is null)
+                {
+                    order = new GeneralRepository<Order, int>(_context);
+                }
+                return order;
+            }
+        }
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

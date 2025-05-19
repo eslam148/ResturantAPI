@@ -12,7 +12,8 @@ namespace ResturantAPI.Domain.Interface
     {
          IGeneralRepository<Delivery, int> Delivery { get; }
          IGeneralRepository<Customer, int> Customer { get; }
-         IGeneralRepository<Restaurant, int> Restaurant { get; }
+        IGeneralRepository<Restaurant, int> Restaurant { get; }
+        IGeneralRepository<Order, int> Order { get; }
         Task<int> SaveAsync();
 
     }

@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using ResturantAPI.Domain;
 using ResturantAPI.Domain.Entities;
 using ResturantAPI.Services.Dtos;
+using ResturantAPI.Services.Dtos.ReportDTO;
+using ResturantAPI.Services.Dtos.ResturntReportDTO;
 using ResturantAPI.Services.Enums;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Model;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace ResturantAPI.API.Controllers
@@ -20,11 +23,13 @@ namespace ResturantAPI.API.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IAdminServices adminServices;
+        private readonly IReportServices reportServices;
 
-        public AdminController(UserManager<ApplicationUser> userManager, IAdminServices adminServices)
+        public AdminController(UserManager<ApplicationUser> userManager, IAdminServices adminServices, IReportServices reportServices)
         {
             this.userManager = userManager;
             this.adminServices = adminServices;
+            this.reportServices = reportServices;
         }
 
         [HttpPost]
@@ -59,5 +64,20 @@ namespace ResturantAPI.API.Controllers
         {
             return await adminServices.ReportAboutUsers(FilterByRole, pageSize);
         }
+
+        /*****************---------------***********----------------*****************-------------************----------------************************/
+
+        /*public IQueryable<AllResturantDto> FilterAll()
+        {
+            //return reportServices.FilterAll();
+        }*/
+
+
+
+
+
+
+
+
     }
 }
