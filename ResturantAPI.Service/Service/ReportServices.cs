@@ -31,7 +31,7 @@ namespace ResturantAPI.Services.Service
         //public Response<AllResturantDto> 
         public Response<IEnumerable<AllResturantDto>> GetAllResturantAsync(bool track = false)
         {
-            IQueryable<AllResturantDto> resturants =  unitOfWork.Restaurant
+            IQueryable<AllResturantDto> resturants =  unitOfWork.RestaurantRepository
                 .GetAllAsync(track)
                 .Select(r => new AllResturantDto
                 {
@@ -51,7 +51,7 @@ namespace ResturantAPI.Services.Service
 
         public async Task<Response<int>> GetRestaurantCounter()
         {
-            int ressturantCounters = await unitOfWork.Restaurant
+            int ressturantCounters = await unitOfWork.RestaurantRepository
                 .GetAllAsync()
                 .CountAsync();
 
@@ -65,7 +65,7 @@ namespace ResturantAPI.Services.Service
 
         public async Task<Response<PagedResult<AllResturantDto>>> GetPaginatedForRestaurantAsync(int pageNumber, int pageSize, Expression<Func<Restaurant, object>>? orderExpression = null)
         {
-            PagedResult<Restaurant> restaurant = await unitOfWork.Restaurant
+            PagedResult<Restaurant> restaurant = await unitOfWork.RestaurantRepository
                 .GetPaginatedAsync(1, 10, r => r.Name);
 
             IQueryable<AllResturantDto> resturantDtos = restaurant.Items
@@ -93,7 +93,7 @@ namespace ResturantAPI.Services.Service
 
         public Response<IEnumerable<AllResturantDto>> FilterAllRestaurant(Expression<Func<Restaurant, bool>> predicate = default, bool track = false)
         {
-            IQueryable<AllResturantDto> allResturants = unitOfWork.Restaurant
+            IQueryable<AllResturantDto> allResturants = unitOfWork.RestaurantRepository
                 .FilterAll(predicate)
                 .Select(r => new AllResturantDto
                 {
@@ -156,7 +156,7 @@ namespace ResturantAPI.Services.Service
 
         public Response<IEnumerable<AllDeliveryOrder>> GetAllDelivery(bool track = false)
         {
-            IQueryable < AllDeliveryOrder> deliveries  = unitOfWork.Delivery
+            IQueryable < AllDeliveryOrder> deliveries  = unitOfWork.DeliveryRepository
                 .GetAllAsync()
                 .Include(d => d.User)
                 .Select(d => new AllDeliveryOrder
@@ -175,7 +175,7 @@ namespace ResturantAPI.Services.Service
 
         public Response<IEnumerable<AllDeliveryOrder>> FilterAllDelivery(Expression<Func<Delivery, bool>> predicate = default, bool track = false)
         {
-            IQueryable<AllDeliveryOrder> deliveries = unitOfWork.Delivery
+            IQueryable<AllDeliveryOrder> deliveries = unitOfWork.DeliveryRepository
                 .FilterAll(predicate, track)
                 .Select(d => new AllDeliveryOrder
                 {   
@@ -194,7 +194,7 @@ namespace ResturantAPI.Services.Service
 
         public async Task<Response<PagedResult<AllDeliveryOrder>>> GetPaginatedForDeliveryAsync(int pageNumber, int pageSize, Expression<Func<Delivery, object>>? orderExpression = null)
         {
-            PagedResult<Delivery> delivery = await unitOfWork.Delivery
+            PagedResult<Delivery> delivery = await unitOfWork.DeliveryRepository
                     .GetPaginatedAsync(pageNumber, pageSize, orderExpression);
 
             IQueryable<AllDeliveryOrder> deliveriesDto = delivery.Items
@@ -221,7 +221,7 @@ namespace ResturantAPI.Services.Service
 
         public async Task<Response<int>> GetDeliveryCounterAsync()
         {
-            int deliveryCount = await unitOfWork.Delivery
+            int deliveryCount = await unitOfWork.DeliveryRepository
                 .GetAllAsync()
                 .CountAsync();
 
@@ -315,10 +315,10 @@ namespace ResturantAPI.Services.Service
                 Message = "here data of customer"
             };*/
             
-            IQueryable<Customer> customer = unitOfWork.Customer
+            IQueryable<Customer> customer = unitOfWork.CustomerRepository
                 .GetAllAsync()
                 .Include(c => c.Addresses)
-                .Include(c => c.user)
+                .Include(c => c.User)
                 .Include(c => c.Orders);
 
             if(!(dateOnly == null))
@@ -336,7 +336,7 @@ namespace ResturantAPI.Services.Service
             IQueryable<AllCustomerDto> customers = customer.Select(c => new AllCustomerDto
             {
                 Id = c.Id,
-                Name = c.user.Name,
+                Name = c.User.Name,
                 City = c.Addresses.Select(c => c.City).FirstOrDefault(),
                 OrderCounter = c.Orders.Count
             });

@@ -49,7 +49,7 @@ namespace RestaurantAPI.Services
                 address.UserId = customer.UserId;
                 customer.Addresses.Add(address);
 
-                _unitOfWork.Customer.Update(customer);
+                _unitOfWork.CustomerRepository.Update(customer);
                 await _unitOfWork.SaveAsync();
 
                 AddressDTO created = _mapper.Map<AddressDTO>(address);
@@ -94,7 +94,7 @@ namespace RestaurantAPI.Services
                         Status = ResponseStatus.NotFound,
                         Message = $"Customer with user-ID {userId} not found."
                     };
-                _unitOfWork.Customer.Delete(customer);
+                _unitOfWork.CustomerRepository.Delete(customer);
                 await _unitOfWork.SaveAsync();
 
                 return new Response<bool>
@@ -117,7 +117,7 @@ namespace RestaurantAPI.Services
 
         public async Task<Response<List<AddressDTO>>> GetAllAddressesAsync(string userId)
         {
-            Customer? customer = await _unitOfWork.Customer.GetByUserIdAsync(userId, ["Addresses"]);
+            Customer? customer = await _unitOfWork.CustomerRepository.GetByUserIdAsync(userId, ["Addresses"]);
             if(customer==null)
             {
                 return new Response<List<AddressDTO>>
@@ -247,7 +247,7 @@ namespace RestaurantAPI.Services
                 customer.User.Email = customerDto.Email;
                 customer.User.PhoneNumber = customerDto.PhoneNumber;
 
-                _unitOfWork.Customer.Update(customer);
+                _unitOfWork.CustomerRepository.Update(customer);
                 await _unitOfWork.SaveAsync();
 
                 return new Response<bool>

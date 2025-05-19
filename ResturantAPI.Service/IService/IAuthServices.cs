@@ -9,12 +9,13 @@ using ResturantAPI.Services.Model;
 
 namespace ResturantAPI.Services.IService
 {
+
     public interface IAuthServices
     {
         Task<Response<bool>> Register(RegisterDTO registerDTO);
         Task<Response<LoginResponseDTO>> Login(LoginDTO loginDTO);
         Task<Response<string>> RefreshToken(string oldToken, string refreshToken);
-      
+
         Task<Response<bool>> ConfirmEmailUseingOTP(string userId, int otp);
 
         Task<Response<bool>> ForgetPasswordAsync(string Email);
@@ -27,8 +28,9 @@ namespace ResturantAPI.Services.IService
         Task<Response<bool>> UpdateUserProfileAsync(string userId, UpdateUserProfileDTO profileDTO);
         Task<Response<bool>> UpdateUserProfileImageAsync(string userId, string imageUrl);
 
-
+        Task<string?> GetCurrentUserId();
 
 
     }
+
 }

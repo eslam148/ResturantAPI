@@ -34,7 +34,7 @@ namespace ResturantAPI.Services.Service
                 var x = orders.Select(o => new OrderForDeliveryDto
                 {
                     OrderId = o.Id,
-                    CustomerName = o.Customer.user.Name,
+                    CustomerName = o.Customer.User.Name,
                     Address = $"{o.DeliveryAddress.Street}, {o.DeliveryAddress.City}, {o.DeliveryAddress.Country}",
                     Status = o.Status.ToString(),
                     DeliveryName = o.Delivery.User.Name
@@ -84,7 +84,7 @@ namespace ResturantAPI.Services.Service
                 var orderDetails = new OrderDetailsDto
                 {
                     OrderId = order.Id,
-                    CustomerName = order.Customer.user.Name,
+                    CustomerName = order.Customer.User.Name,
                     Address = $"{order.DeliveryAddress.Street}, {order.DeliveryAddress.City}, {order.DeliveryAddress.Country}",
                     Status = order.Status.ToString(),
                     DeliveryName = order.Delivery?.User?.Name,
@@ -238,7 +238,7 @@ namespace ResturantAPI.Services.Service
                 var mappedOrders = orders.Select(o => new OrderForDeliveryDto
                 {
                     OrderId = o.Id,
-                    CustomerName = o.Customer.user.Name,
+                    CustomerName = o.Customer.User.Name,
                     Address = $"{o.DeliveryAddress.Street}, {o.DeliveryAddress.City}, {o.DeliveryAddress.Country}",
                     Status = o.Status.ToString(),
                     DeliveryName = o.Delivery.User.Name
@@ -286,7 +286,7 @@ namespace ResturantAPI.Services.Service
                 var mappedOrders = orders.Select(o => new OrdersByDeliveryDt
                 {
                     OrderId = o.Id,
-                    CustomerName = o.Customer.user.Name,
+                    CustomerName = o.Customer.User.Name,
                     Address = $"{o.DeliveryAddress.Street}, {o.DeliveryAddress.City}, {o.DeliveryAddress.Country}",
                     Status = o.Status.ToString(),
                     DeliveryName = o.Delivery.User.Name
