@@ -13,9 +13,9 @@ namespace ResturantAPI.Services.IService
         Task<Response<OrderDetailsDto>> GetOrderDetailsForDeliveryAsync(int orderId);
         //UpdateOrderStatusAsync
         Task<Response<DeliveryStatusDto>> UpdateOrderStatusAsync(int orderId, OrderStatus status);
-        Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoOntheWayAsync(int orderId);
-        Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoDevlivedAsync(int orderId);
-        Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoCancelledAsync(int orderId);
+        Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoOntheWay(int orderId);
+        Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromOntheWaytoDevlived(int orderId);
+        Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromDevlivedtoCancelled(int orderId);
         Task<Response<IEnumerable<OrderStatusFilterDto>>> GetOrdersByStatusAsync(OrderStatus status);
         Task<Response<IEnumerable<OrdersByDeliveryDt>>> GetOrdersByDeliveryAsync(int deliveryId);
 

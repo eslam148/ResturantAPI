@@ -209,17 +209,17 @@ namespace ResturantAPI.Services.Service
             }
         }
 
-        public async Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoDevlivedAsync(int orderId)
+        public async Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromOntheWaytoDevlived(int orderId)
         {
             return await UpdateOrderStatusAsync(orderId, Enums.OrderStatus.Delivered);
 
         }
 
-        public async Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoCancelledAsync(int orderId)
+        public async Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromDevlivedtoCancelled(int orderId)
         {
             return await UpdateOrderStatusAsync(orderId, Enums.OrderStatus.Cancelled);
         }
-        public async Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoOntheWayAsync(int orderId)
+        public async Task<Response<DeliveryStatusDto>> UpdateOrderStatusFromPindingtoOntheWay(int orderId)
         {
             return await UpdateOrderStatusAsync(orderId, Enums.OrderStatus.Shipped);
         }
