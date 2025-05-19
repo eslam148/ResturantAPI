@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using ResturantAPI.Domain.Entities;
 using ResturantAPI.Services.Dtos;
 using ResturantAPI.Services.Enums;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Model;
- using ResturantAPI.Services.AuthHelper;
+using ResturantAPI.Services.AuthHelper;
 using ResturantAPI.Domain.Interface;
- namespace ResturantAPI.Services.Service
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+namespace ResturantAPI.Services.Service
 {
-    public class AuthServices(UserManager<ApplicationUser> userManager,IConfiguration config,IUnitOfWork unitOfWork ) : IAuthServices
+    public class AuthServices(UserManager<ApplicationUser> userManager, IConfiguration config, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor) : IAuthServices
     {
         private readonly UserManager<ApplicationUser> userManager = userManager;
         private readonly IConfiguration config = config;
- 
+
         public IUnitOfWork UnitOfWork { get; } = unitOfWork;
 
         public async Task<Response<bool>> Register(RegisterDTO registerDTO)
@@ -80,7 +77,7 @@ using ResturantAPI.Domain.Interface;
                     Status = ResponseStatus.Success,
                     Message = "User registered successfully"
                 };
-               
+
             }
 
             await userManager.DeleteAsync(newUser);
@@ -98,13 +95,13 @@ using ResturantAPI.Domain.Interface;
             switch (role)
             {
                 case Role.Customer:
-                    await UnitOfWork.Customer.AddAsync(new Customer { UserId = userId });
+                    await UnitOfWork.CustomerRepository.AddAsync(new Customer { UserId = userId });
                     break;
                 case Role.Delivery:
-                    await UnitOfWork.Delivery.AddAsync(new Delivery { UserId = userId });
+                    await UnitOfWork.DeliveryRepository.AddAsync(new Delivery { UserId = userId });
                     break;
                 case Role.Restaurant:
-                    await UnitOfWork.Restaurant.AddAsync(new Restaurant { UserId = userId });
+                    await UnitOfWork.RestaurantRepository.AddAsync(new Restaurant { UserId = userId });
                     break;
             }
         }
@@ -143,7 +140,7 @@ using ResturantAPI.Domain.Interface;
         {
             try
             {
-                 
+
                 // Check if the user exists
                 ApplicationUser? user = await userManager.FindByEmailAsync(loginDTO.Email);
                 if (user == null)
@@ -155,13 +152,13 @@ using ResturantAPI.Domain.Interface;
                         Message = "User not found"
                     };
                 }
-                
+
                 // Check if the password is correct
                 bool result = await userManager.CheckPasswordAsync(user, loginDTO.Password);
                 if (result)
-                { 
+                {
                     string token = await userManager.GenerateTokenAsync(user);
-                    string refreshToken = await  userManager.GenerateRefreshTokenAsync(user);
+                    string refreshToken = await userManager.GenerateRefreshTokenAsync(user);
                     return new Response<LoginResponseDTO>
                     {
                         Data = new LoginResponseDTO
@@ -185,7 +182,7 @@ using ResturantAPI.Domain.Interface;
 
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new Response<LoginResponseDTO>
                 {
@@ -236,17 +233,17 @@ using ResturantAPI.Domain.Interface;
 
         public async Task<Response<int>> GenerateOTP(string userId)
         {
-            
+
             return new Response<int>
-                  {
-                      Data = await userManager.GenerateOTPAsync(userId),
-                      Status = ResponseStatus.BadRequest,
-                      Message = "User registration failed",
-                      InternalMessage = "Failed to save user data"
-                  };
+            {
+                Data = await userManager.GenerateOTPAsync(userId),
+                Status = ResponseStatus.BadRequest,
+                Message = "User registration failed",
+                InternalMessage = "Failed to save user data"
+            };
         }
 
-        public async Task<Response<bool>> ConfirmEmailUseingOTP(string userId,int otp)
+        public async Task<Response<bool>> ConfirmEmailUseingOTP(string userId, int otp)
         {
             try
             {
@@ -288,14 +285,16 @@ using ResturantAPI.Domain.Interface;
         {
             try
             {
-              ApplicationUser? user = await  userManager.FindByEmailAsync(Email);
-                if(user == null)
+                ApplicationUser? user = await userManager.FindByEmailAsync(Email);
+                if (user == null)
                 {
                     return Response<bool>.Fail("User Not Found");
                 }
-                string token =   await  userManager.GeneratePasswordResetTokenAsync(user);
+                string token = await userManager.GeneratePasswordResetTokenAsync(user);
                 return Response<bool>.Success(true, token);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return Response<bool>.Error("", ex.Message);
             }
         }
@@ -314,7 +313,7 @@ using ResturantAPI.Domain.Interface;
                         Message = "User not found"
                     };
                 }
-             //   string token = await userManager.GeneratePasswordResetTokenAsync(user);
+                //   string token = await userManager.GeneratePasswordResetTokenAsync(user);
                 IdentityResult result = await userManager.ResetPasswordAsync(user, restPasswordDTO.OTP, restPasswordDTO.Password);
                 if (result.Succeeded)
                 {
@@ -347,11 +346,11 @@ using ResturantAPI.Domain.Interface;
 
         }
 
-        public async Task<Response<bool>> ChangePasswordAsync(string UserId,string oldPassword,string NewPassword )
+        public async Task<Response<bool>> ChangePasswordAsync(string UserId, string oldPassword, string NewPassword)
         {
             try
             {
-                 ApplicationUser? user = await userManager.FindByIdAsync(UserId);
+                ApplicationUser? user = await userManager.FindByIdAsync(UserId);
                 IdentityResult result = await userManager.ChangePasswordAsync(user, oldPassword, NewPassword);
                 if (result.Succeeded)
                 {
@@ -391,7 +390,7 @@ using ResturantAPI.Domain.Interface;
             ApplicationUser? user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return  new Response<UserProfileDTO>
+                return new Response<UserProfileDTO>
                 {
                     Data = null,
                     Status = ResponseStatus.NotFound,
@@ -400,12 +399,12 @@ using ResturantAPI.Domain.Interface;
             }
             var userProfile = new UserProfileDTO
             {
-               Name = user.Name,
-               Email = user.Email,
-              PhoneNumber =  user.PhoneNumber,
-             
+                Name = user.Name,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+
             };
-            return  new Response<UserProfileDTO>
+            return new Response<UserProfileDTO>
             {
                 Data = userProfile,
                 Status = ResponseStatus.Success,
@@ -461,7 +460,15 @@ using ResturantAPI.Domain.Interface;
             }
 
         }
+        public async Task<string?> GetCurrentUserId()
+        {
+            ClaimsPrincipal? principal = httpContextAccessor.HttpContext?.User;
+            if (principal?.Identity?.Name == null)
+                return null;
 
+            ApplicationUser? user = await userManager.FindByNameAsync(principal.Identity.Name);
+            return user?.Id;
+        }
         public Task<Response<bool>> UpdateUserProfileImageAsync(string userId, string imageUrl)
         {
             throw new NotImplementedException();
@@ -472,9 +479,9 @@ using ResturantAPI.Domain.Interface;
             throw new NotImplementedException();
         }
 
-        
 
-        
+
+
     }
-    
+
 }

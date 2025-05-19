@@ -26,7 +26,7 @@ namespace ResturantAPI.Infrastructure.Context
         
 
 
-        public DbSet<Restaurant> Restaurants { get; set; }
+        
         public DatabaseContext(DbContextOptions<DatabaseContext> optionsBuilder) : base(optionsBuilder)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
