@@ -27,9 +27,12 @@ namespace ResturantAPI.API
             builder.Services.ConfigureIdentity(builder.Configuration);
             builder.Services.ConfigureExtinction(builder.Configuration);
             builder.Services.ConfigureJwtToken(builder.Configuration);
-             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.ConfigureSwagger(builder.Configuration);
+            JwtTokenExtensions.config = builder.Configuration;
             var app = builder.Build();
             JwtTokenExtensions.config = builder.Configuration;
             // app.InitializeDb();
@@ -43,6 +46,7 @@ namespace ResturantAPI.API
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAllOrigins");
+            app.UseAuthentication(); 
             app.UseAuthorization();
             app.UseStaticFiles();
 

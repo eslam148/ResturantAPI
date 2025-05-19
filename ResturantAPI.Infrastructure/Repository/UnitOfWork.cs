@@ -3,25 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
+using ResturantAPI.Services.IRepository;
+using ResturantAPI.Services.IService;
 
 namespace ResturantAPI.Infrastructure.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
-      
+
+
+        private ICustomerRepository _customer;
+        //private IUserRepository _user;
+        //private IRepository<ServiceCategory, int> _serviceCategories;
+        //private IRepository<SubCategory, int> _subCategories;
 
         public UnitOfWork(DatabaseContext context)
         {
             _context = context;
+
         }
 
-        private IOrderRepository Order;
+        public ICustomerRepository Customer
+        {
+            get
+            {
+                if(_customer is null)
+                {
+                    _customer = new CustomerRepository(_context);
+                }
 
-
+                return _customer;
+            }
+        }
         private IGeneralRepository<Restaurant, int> restaurant;
         public IGeneralRepository<Restaurant, int> Restaurant
         {
@@ -34,18 +52,7 @@ namespace ResturantAPI.Infrastructure.Repository
                 return restaurant;
             }
         }
-        private IGeneralRepository<Customer, int> customer;
-        public IGeneralRepository<Customer, int> Customer
-        {
-            get
-            {
-                if (customer is null)
-                {
-                    customer = new GeneralRepository<Customer, int>(_context);
-                }
-                return customer;
-            }
-        }
+        
         private IGeneralRepository<Delivery, int> delivery;
         public IGeneralRepository<Delivery, int> Delivery
         {
@@ -58,6 +65,44 @@ namespace ResturantAPI.Infrastructure.Repository
                 return delivery;
             }
         }
+
+        private IGeneralRepository<Address, int> address;
+        public IGeneralRepository<Address, int> Address
+        {
+            get
+            {
+                if (address is null)
+                {
+                    address = new GeneralRepository<Address, int>(_context);
+                }
+                return address;
+            }
+        }
+
+
+        //public IUserRepository Users
+        //{
+        //    get
+        //    {
+        //        if (_user is null)
+        //        {
+        //            _user = new UserRepository(_context);
+        //        }
+        //        return _user;
+        //    }
+        //}
+
+        // public IRepository<SubCategory, int> SUbCategories
+        //{
+        //    get
+        //    {
+        //        if (_subCategories is null)
+        //        {
+        //            _subCategories = new Repository<SubCategory, int>(_context);
+        //        }
+        //        return _subCategories;
+        //    }
+        //}
 
         public IOrderRepository OrderRepository
         {

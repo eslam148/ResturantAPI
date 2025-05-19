@@ -247,6 +247,7 @@ namespace ResturantAPI.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -624,13 +625,13 @@ namespace ResturantAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Customer", b =>
                 {
-                    b.HasOne("ResturantAPI.Domain.Entities.ApplicationUser", "user")
+                    b.HasOne("ResturantAPI.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Delivery", b =>
@@ -725,7 +726,7 @@ namespace ResturantAPI.Infrastructure.Migrations
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("ResturantAPI.Domain.Entities.Customer", "Customer")
-                        .WithMany("payments")
+                        .WithMany("Payments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -766,7 +767,7 @@ namespace ResturantAPI.Infrastructure.Migrations
 
                     b.Navigation("Orders");
 
-                    b.Navigation("payments");
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("ResturantAPI.Domain.Entities.Delivery", b =>

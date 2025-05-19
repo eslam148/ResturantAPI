@@ -1,7 +1,10 @@
-﻿namespace ResturantAPI.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ResturantAPI.Domain
 {
     public class Entity<T>
     {
+        [Key]
         public T Id { get; protected set; }
         public Entity(T id)
         {
