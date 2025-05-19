@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
 
@@ -45,19 +46,19 @@ namespace ResturantAPI.Infrastructure.Repository
         //    }
         //}
 
-       // public IRepository<SubCategory, int> SUbCategories
-        //{
-        //    get
-        //    {
-        //        if (_subCategories is null)
-        //        {
-        //            _subCategories = new Repository<SubCategory, int>(_context);
-        //        }
-        //        return _subCategories;
-        //    }
-        //}
-
-
+     
+        private IOrderRepository orderRepository;
+        public IOrderRepository OrderRepository
+        {
+            get
+            {
+                if (orderRepository is null)
+                {
+                    orderRepository = new OrderRepository(_context);
+                }
+                return orderRepository;
+            }
+        }
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();
