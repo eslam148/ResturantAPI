@@ -133,12 +133,12 @@ namespace ResturantAPI.Services.Service
                 DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
                 DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
 
-                orders = unitOfWork.Order.GetAllAsync()
+                orders = unitOfWork.OrderRepository.GetAllAsync()
                     .Where(o => o.RestaurantId == restaurantId && o.OrderDate >= startTime && o.OrderDate <= endTime);
             }
             else
             {
-                orders = unitOfWork.Order.GetAllAsync()
+                orders = unitOfWork.OrderRepository.GetAllAsync()
                     .Where(o => o.RestaurantId == restaurantId);
             }
 
@@ -252,12 +252,12 @@ namespace ResturantAPI.Services.Service
                 DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
                 DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
 
-                orders = unitOfWork.Order.GetAllAsync()
+                orders = unitOfWork.OrderRepository.GetAllAsync()
                     .Where(o => o.DeliveryId == deliveryID && o.OrderDate >= startTime && o.OrderDate <= endTime);
             }
             else
             {
-                orders = unitOfWork.Order.GetAllAsync()
+                orders = unitOfWork.OrderRepository.GetAllAsync()
                     .Where(o => o.DeliveryId == deliveryID);
             }
 
