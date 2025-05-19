@@ -11,19 +11,10 @@ using System.Threading.Tasks;
 
 namespace ResturantAPI.Infrastructure.Repository
 {
-    public class OrderRepository:GeneralRepository<Order,int>, IOrderRepository
+    public class OrderRepository : GeneralRepository<Order, int>, IOrderRepository
     {
-        public OrderRepository(DatabaseContext context):base(context) { }
-     
-        public async Task<IEnumerable<Order>> GetAllIncludingAsync(params Expression<Func<Order, object>>[] includes)
+        public OrderRepository(DatabaseContext context) : base(context)
         {
-            IQueryable<Order> query = _context.Orders;
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
-            return await query.ToListAsync();
         }
-
     }
 }

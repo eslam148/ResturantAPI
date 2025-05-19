@@ -12,6 +12,8 @@ namespace ResturantAPI.API.Configuration
     {
         public static void ConfigureExtinction(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IOrderService, OrderService>();
+
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IAuthServices, AuthServices>();
