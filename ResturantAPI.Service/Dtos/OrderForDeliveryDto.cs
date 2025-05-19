@@ -8,7 +8,7 @@ namespace ResturantAPI.Services.Dtos
 {
     public class OrderForDeliveryDto
     {
-        public Guid OrderId { get; set; }
+        public int OrderId { get; set; }
         public string CustomerName { get; set; }
         public string Address { get; set; }
         public string Status { get; set; }

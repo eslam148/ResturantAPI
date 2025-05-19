@@ -32,7 +32,7 @@ namespace ResturantAPI.API
             builder.Services.ConfigureSwagger(builder.Configuration);
             var app = builder.Build();
             JwtTokenExtensions.config = builder.Configuration;
-            //  app.InitializeDb();
+            // app.InitializeDb();
 
             //// Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())

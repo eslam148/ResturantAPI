@@ -19,8 +19,9 @@ namespace ResturantAPI.Infrastructure.Repository
             _context = context;
         }
 
+        private IOrderRepository Order;
 
-       
+
         private IGeneralRepository<Restaurant, int> restaurant;
         public IGeneralRepository<Restaurant, int> Restaurant
         {
@@ -58,7 +59,18 @@ namespace ResturantAPI.Infrastructure.Repository
             }
         }
 
-     
+        public IOrderRepository OrderRepository
+        {
+            get
+            {
+                if (Order is null)
+                {
+                    Order = new OrderRepository(_context);
+                }
+                return Order;
+            }
+        }
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

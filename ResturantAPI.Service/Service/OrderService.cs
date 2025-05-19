@@ -21,14 +21,14 @@ namespace ResturantAPI.Services.Service
 
         public async Task<IEnumerable<OrderForDeliveryDto>> GetAllOrdersForDeliveryAsync()
         {
-            var orders = await _unitOfWork.OrderRepository.GetAllIncludingAsync(o => o.Customer, o => o.Delivery);
+            var orders = await _unitOfWork.OrderRepository.GetAllIncludingAsync(o => o.Customer.user, o => o.Delivery.User);
             return orders.Select(o => new OrderForDeliveryDto
             {
                 OrderId = o.Id,
-                CustomerName = o.Customer.Name,
-                Address = o.Customer.Address.FullAddress,
+                CustomerName = o.Customer.user.Name,
+                Address = o.Customer.Addresses.FirstOrDefault().Country,
                 Status = o.Status.ToString(),
-                DeliveryName = o.Delivery?.Name
+                DeliveryName = o.Delivery?.User.Name
             });
         }
 
