@@ -4,17 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
-using ResturantAPI.Services.Dtos;
-using ResturantAPI.Services.Enums;
-using ResturantAPI.Services.IRepository;
-using ResturantAPI.Services.IService;
-using ResturantAPI.Services.Model;
-using ResturantAPI.Services.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace ResturantAPI.Infrastructure.Repository
 {

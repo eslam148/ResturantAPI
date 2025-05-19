@@ -4,7 +4,6 @@ using RestaurantAPI.Services;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
 using ResturantAPI.Infrastructure.Repository;
-using ResturantAPI.Services.IRepository;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.MapperHelper;
 using ResturantAPI.Services.Service;
@@ -15,16 +14,18 @@ namespace ResturantAPI.API.Configuration
     {
         public static void ConfigureExtinction(this IServiceCollection services, IConfiguration configuration)
         {
+      
             // Register repositories
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IOrderService, OrderService>();
-
-            services.AddScoped<IMovieRepository, MovieRepository>();
+ 
 
             // Register services
             services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IMovieService, MovieService>();
+ 
             services.AddScoped<IAuthServices, AuthServices>();
+            services.AddScoped<IRestaurantRepository  , RestaurantRepository>();
+            services.AddScoped<IRestaurantService  , RestaurantService>();
             services.AddScoped<IUploudServices, UploudServices>();
             services.AddScoped<IAdminServices, AdminServices>();
 

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿ 
 using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Infrastructure.Context;
-using ResturantAPI.Services.IRepository;
-using ResturantAPI.Services.IService;
+ 
+ 
+
 
 namespace ResturantAPI.Infrastructure.Repository
 {
@@ -24,9 +20,11 @@ namespace ResturantAPI.Infrastructure.Repository
 
         public UnitOfWork(DatabaseContext context)
         {
+
             _context = context;
 
         }
+       
 
         public ICustomerRepository CustomerRepository
         {

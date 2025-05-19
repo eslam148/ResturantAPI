@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ResturantAPI.Domain.Interface
+
 {
     public interface IGeneralRepository<T, TId>
         where T : Entity<TId>

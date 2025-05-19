@@ -1,7 +1,6 @@
 
 using ResturantAPI.API.Configuration;
 using ResturantAPI.Infrastructure.Repository;
-using ResturantAPI.Services.IRepository;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Service;
 using ResturantAPI.API.Configuration;

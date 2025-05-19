@@ -6,6 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ResturantAPI.Domain.Entities;
+using ResturantAPI.Domain.Entities;
+
+
+using ResturantAPI.Domain.Interface;
+
 
 
 namespace ResturantAPI.Domain.Interface
