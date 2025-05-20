@@ -28,22 +28,22 @@ namespace ResturantAPI.API.Controllers
             _restaurantService = restaurantService;
         }
 
-        //api/Customer/Profile
-        [HttpGet("Profile")]
+        //api/Customer/CurrentProfile
+        [HttpGet("CurrentProfile")]
         public async Task<Response<CustomerProfileDTO>> GetCustomerProfile()
         {
             return await _customerService.GetCustomerProfile();
         }
 
-        //api/Customer/5
-        [HttpGet("{id}")]
+        //api/Customer/Details/{id}
+        [HttpGet("Details/{id}")]
         public async Task<Response<CustomerDTO>> GetCustomer(int id)
         {
             return await _customerService.GetCustomerById(id);
         }
 
-        //api/customer
-        [HttpPut]
+        //api/Customer/UpdateProfile
+        [HttpPut("UpdateProfile")]
         public async Task<Response<bool>> UpdateCustomer([FromBody] CustomerUpdateDTO customer)
         {
             if (!ModelState.IsValid)
@@ -71,8 +71,8 @@ namespace ResturantAPI.API.Controllers
 
         }
 
-        //api/customer
-        [HttpDelete]
+        //api/Customer/DeleteProfile
+        [HttpDelete("DeleteProfile")]
         public async Task<Response<bool>> DeleteCustomer()
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -80,8 +80,8 @@ namespace ResturantAPI.API.Controllers
             return await _customerService.DeleteCustomer(userId);
         }
 
-
-        [HttpPost("address")]
+        //api/Customer/AddAddresses
+        [HttpPost("AddAddresses")]
         public async Task<Response<AddressDTO>> AddAddress([FromBody] AddressDTO dto)
         {
             if (!ModelState.IsValid)
@@ -109,7 +109,8 @@ namespace ResturantAPI.API.Controllers
 
         }
 
-        [HttpGet("addresses")]
+        //api/Customer/GetAllAddresses
+        [HttpGet("GetAllAddresses")]
         public async Task<Response<List<AddressDTO>>> GetAllAddresses()
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -127,7 +128,8 @@ namespace ResturantAPI.API.Controllers
            
         }
 
-        [HttpPost("order")]
+        //api/Customer/AddOrder
+        [HttpPost("AddOrder")]
         public async Task<Response<OrderDTO>> AddOrder([FromBody] OrderDTO orderDto)
         {
             if (!ModelState.IsValid)
@@ -155,7 +157,7 @@ namespace ResturantAPI.API.Controllers
 
         }
 
-        [HttpGet("orders")]
+        [HttpGet("GetAllOrders")]
         public async Task<Response<List<OrderDTO>>> GetAllOrders()
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -171,7 +173,7 @@ namespace ResturantAPI.API.Controllers
             return await _customerService.GetAllOrdersAsync(userId);
         }
 
-        [HttpPost("Payment")]
+        [HttpPost("AddPayment")]
         public async Task<Response<PaymentDTO>> AddPayment([FromBody] PaymentDTO paymentDTO)
         {
             if (!ModelState.IsValid)
@@ -200,7 +202,7 @@ namespace ResturantAPI.API.Controllers
             
         }
 
-        [HttpGet("Payments")]
+        [HttpGet("GetAllPayments")]
         public async Task<Response<List<PaymentDTO>>> GetAllPayments()
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -216,7 +218,7 @@ namespace ResturantAPI.API.Controllers
             return await _customerService.GetAllPaymentsAsync(userId);
         }
 
-        [HttpGet("restaurants")]
+        [HttpGet("GetAllRestaurants")]
         public async Task<Response<List<RestaurantDTO>>> GetAllRestaurants()
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
