@@ -25,10 +25,9 @@ namespace ResturantAPI.Services.Service
         //private readonly RoleManager<IdentityRole> identityRole;
         private readonly IUnitOfWork unitOfWork;
 
-        public AdminServices(UserManager<ApplicationUser> userManager/*, RoleManager<IdentityRole> identityRole*/, IUnitOfWork unitOfWork)
+        public AdminServices(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
         {
             this.userManager = userManager;
-            //this.identityRole = identityRole;
             this.unitOfWork = unitOfWork;
         }
         public async Task<Response<AdminResponseDTO>> AddRoleToUser(AdminDTO adminDTO)
@@ -46,13 +45,13 @@ namespace ResturantAPI.Services.Service
             }
 
 
-            IdentityResult? result = await userManager.AddToRoleAsync(user, "Admin");
+            IdentityResult? result = await userManager.AddToRoleAsync(user, adminDTO.Role);
             if (result.Succeeded)
             {
                 return new Response<AdminResponseDTO>
                 {
                     Status = ResponseStatus.Success,
-                    Message = "User added sucsessfuly"
+                    Message = "User's role added sucsessfuly"
                 };
             }
 

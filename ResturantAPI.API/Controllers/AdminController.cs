@@ -19,6 +19,7 @@ namespace ResturantAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("Admin")]
     public class AdminController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;

@@ -11,7 +11,7 @@ namespace ResturantAPI.Services.Dtos
     public class AdminDTO
     {
         public string UserName { get; set; }
-        //public string Password { get; set; }
+        public string Role { get; set; }
     }
     public class AdminResponseDTO
     {

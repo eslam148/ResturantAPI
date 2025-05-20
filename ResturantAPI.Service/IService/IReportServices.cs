@@ -17,10 +17,10 @@ namespace ResturantAPI.Services.IService
     public interface IReportServices
     {
         Response<IEnumerable<AllResturantDto>> GetAllResturantAsync(bool track = false);
-        Response<IEnumerable<AllResturantDto>> FilterAllRestaurant(Expression<Func<Restaurant, bool>> predicate = default, bool track = false);
-        public Task<Response<PagedResult<AllResturantDto>>> GetPaginatedForRestaurantAsync(int pageNumber, int pageSize, Expression<Func<Restaurant, object>>? orderExpression = null);
-        Task<Response<int>> GetRestaurantCounter();
-        Task<Response<decimal>> AverageOrdersPrice(int restaurantId, DateOnly dateOnly);
+        //Response<IEnumerable<AllResturantDto>> FilterAllRestaurant(Expression<Func<Restaurant, bool>> predicate = default, bool track = false);
+        Task<Response<PagedResult<AllResturantDto>>> GetPaginatedForRestaurantAsync(int pageNumber, int pageSize, Expression<Func<Restaurant, object>>? orderExpression = null);
+        Task<Response<int>> GetRestaurantCounterAsync();
+        Task<Response<decimal>> AverageOrdersPriceAsync(int restaurantId, DateOnly dateOnly);
         /***********------------- Delivery -------------------*/
         Response<IEnumerable<AllDeliveryOrder>> GetAllDelivery(bool track = false);
         Response<IEnumerable<AllDeliveryOrder>> FilterAllDelivery(Expression<Func<Delivery, bool>> predicate = default, bool track = false);
@@ -28,8 +28,8 @@ namespace ResturantAPI.Services.IService
         Task<Response<int>> GetDeliveryCounterAsync();
         Task<Response<int>> GetDeliveryOrdersCountAsync(int deliveryID, DateOnly dateOnly = default);
         /**********--------------------------Customer----------------------------**************/
-        public Response<IEnumerable<AllCustomerDto>> GetAllCustomerInResturant(string address = default, DateOnly dateOnly = default);
-
+        Response<IEnumerable<AllCustomerDto>> GetAllCustomerInResturant(string address = default, DateOnly dateOnly = default);
+        Task<Response<CustomerDto>> CustomerOrderCounter(int customerId, DateOnly dateOnly = default);
 
 
     }

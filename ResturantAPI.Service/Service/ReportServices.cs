@@ -21,12 +21,10 @@ namespace ResturantAPI.Services.Service
     public class ReportServices : IReportServices
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IGeneralRepository<Restaurant, int> generalRepository;
 
-        ReportServices(IUnitOfWork unitOfWork, IGeneralRepository<Restaurant, int> generalRepository)
+        public ReportServices(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            this.generalRepository = generalRepository;
         }
         //public Response<AllResturantDto> 
         public Response<IEnumerable<AllResturantDto>> GetAllResturantAsync(bool track = false)
@@ -49,7 +47,7 @@ namespace ResturantAPI.Services.Service
             };
         }
 
-        public async Task<Response<int>> GetRestaurantCounter()
+        public async Task<Response<int>> GetRestaurantCounterAsync()
         {
             int ressturantCounters = await unitOfWork.Restaurant
                 .GetAllAsync()
@@ -93,42 +91,37 @@ namespace ResturantAPI.Services.Service
 
         public Response<IEnumerable<AllResturantDto>> FilterAllRestaurant(Expression<Func<Restaurant, bool>> predicate = default, bool track = false)
         {
-            IQueryable<AllResturantDto> allResturants = unitOfWork.Restaurant
-                .FilterAll(predicate)
-                .Select(r => new AllResturantDto
+            IQueryable<Restaurant> allResturants;
+            if(predicate == null)
+            {
+                allResturants = unitOfWork.Restaurant
+                    .GetAllAsync();
+            }
+            else
+            {
+                allResturants = unitOfWork.Restaurant
+                    .FilterAll(predicate);
+            }
+
+            return new Response<IEnumerable<AllResturantDto>>
+            {
+                Data = allResturants.Select(r => new AllResturantDto
                 {
                     Name = r.Name,
                     Id = r.Id,
                     Location = r.Location,
                     OrderCounter = r.Orders.Count
-                });
-
-            return new Response<IEnumerable<AllResturantDto>>
-            {
-                Data = allResturants,
+                }),
                 Message = "there is all resturants",
                 Status = ResponseStatus.Success,
             };
 
         }
 
-        /*public async Task<decimal> AveragePriceItem(int restaurantId, DateOnly dateOnly)
-        {
-            DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
-            DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
-            var items = await unitOfWork.Menu.GetAllAsync()
-                .Include(m => m.Items)
-                .Where(m => m.RestaurantId == restaurantId && m..CreatedAt >= startTime && m.CreatedAt <= endTime)
-                .SelectMany(m => m.Items)
-                .ToListAsync();
-
-            var averagePrice = items.Average(i => i.Price);
-            return averagePrice;
-        }*/
-        public async Task<Response<decimal>> AverageOrdersPrice(int restaurantId, DateOnly dateOnly)
+        public async Task<Response<decimal>> AverageOrdersPriceAsync(int restaurantId, DateOnly dateOnly)
         {
             IQueryable<Order> orders;
-            if (dateOnly != null)
+            if (dateOnly != default)
             {
                 DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
                 DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
@@ -177,6 +170,7 @@ namespace ResturantAPI.Services.Service
         {
             IQueryable<AllDeliveryOrder> deliveries = unitOfWork.Delivery
                 .FilterAll(predicate, track)
+                .Include(d => d.User)
                 .Select(d => new AllDeliveryOrder
                 {   
                     Id = d.Id,
@@ -247,7 +241,7 @@ namespace ResturantAPI.Services.Service
         public async Task <Response<int>> GetDeliveryOrdersCountAsync(int deliveryID, DateOnly dateOnly = default   )
         {
             IQueryable<Order> orders;
-            if (dateOnly != null)
+            if (dateOnly != default)
             {
                 DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
                 DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
@@ -272,56 +266,14 @@ namespace ResturantAPI.Services.Service
 /******************------------------********---------------------*********************/
             /**********--------------------------Customer----------------------------**************/
         public Response<IEnumerable<AllCustomerDto>> GetAllCustomerInResturant(string address = default, DateOnly dateOnly = default)
-        {
-            /*IQueryable<AllCustomerDto> customers;
-            if (address == null && dateOnly == null)
-            {
-                customers = unitOfWork.Customer
-                .GetAllAsync()
-                .Include(c => c.Addresses)
-                .Include(c => c.user)
-                .Include(c => c.Orders)
-                .Select(c => new AllCustomerDto
-                {
-                    Id = c.Id,
-                    Name = c.user.Name,
-                    City = c.Addresses.Select(c => c.City).FirstOrDefault(),
-                    OrderCounter = c.Orders.Count
-                });
-            }
-            else
-            {
-                DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
-                DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
-
-                customers = unitOfWork.Customer
-                    .GetAllAsync()
-                    .Include(c => c.Addresses)
-                    .Include(c => c.user)
-                    .Where(c => c.Addresses.Any(a => a.City == address)
-                        && c.Orders.Any(o => o.OrderDate >= startTime && o.OrderDate <= endTime))
-                    .Select(c => new AllCustomerDto
-                    {
-                        Id = c.Id,
-                        Name = c.user.Name,
-                        City = c.Addresses.Select(c => c.City).FirstOrDefault(),
-                        OrderCounter = c.Orders.Count
-                    });
-            }
-            return new Response<IEnumerable<AllCustomerDto>>
-            {
-                Data = customers,
-                Status = ResponseStatus.Created,
-                Message = "here data of customer"
-            };*/
-            
+        {   
             IQueryable<Customer> customer = unitOfWork.Customer
                 .GetAllAsync()
                 .Include(c => c.Addresses)
                 .Include(c => c.user)
                 .Include(c => c.Orders);
 
-            if(!(dateOnly == null))
+            if(dateOnly != default)
             {
                 DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
                 DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
@@ -330,7 +282,7 @@ namespace ResturantAPI.Services.Service
             }
             if (!string.IsNullOrEmpty(address))
             {
-                customer = customer.Where(c => c.Addresses.Any(a => a.City == address));
+                customer = customer.Where(c => c.Addresses.Any(a => a.City.Contains(address)));
             }
 
             IQueryable<AllCustomerDto> customers = customer.Select(c => new AllCustomerDto
@@ -348,6 +300,49 @@ namespace ResturantAPI.Services.Service
                 Message = "here data of customer",
             };
         }
+
+        public async Task<Response<CustomerDto>> CustomerOrderCounter(int customerId, DateOnly dateOnly = default)
+        {
+            IQueryable<Customer> customers = unitOfWork.Customer.GetAllAsync();
+            if (dateOnly != default)
+            {
+                DateTime startTime = dateOnly.ToDateTime(TimeOnly.MinValue);
+                DateTime endTime = dateOnly.ToDateTime(TimeOnly.MaxValue);
+
+                customers = customers.Where(c => c.Id == customerId && (c.CreatedAt >= startTime && c.CreatedAt <= endTime));
+            }
+            else
+            {
+                customers.Where(c => c.Id == customerId);
+            }
+
+            CustomerDto customerDto = await customers.Select(c => new CustomerDto
+            {
+                Id = c.Id,
+                Name = c.user.Name,
+                OrderCounter = c.Orders.Count
+            }).FirstOrDefaultAsync();
+
+            if (customerDto.OrderCounter >= 1)
+            {
+                return new Response<CustomerDto>
+                {
+                    Data = customerDto,
+                    Status = ResponseStatus.Success,
+                    Message = "There is counter of customer order",
+                };
+            }
+            else
+            {
+                return new Response<CustomerDto>
+                {
+                    Data = customerDto,
+                    Status = ResponseStatus.Success,
+                    Message = "There customer doesn't have any order",
+                };
+            }
+        }
+
 
 
 
