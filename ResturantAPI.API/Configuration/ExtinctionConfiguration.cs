@@ -23,6 +23,7 @@ namespace ResturantAPI.API.Configuration
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IAuthServices, AuthServices>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
 
             // Register unit of work and file system
             services.AddScoped<IUnitOfWork, UnitOfWork>();

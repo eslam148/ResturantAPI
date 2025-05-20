@@ -20,8 +20,13 @@ namespace ResturantAPI.Services.IService
         Task<Response<bool>> DeleteCustomer(string? userId);
 
         Task<Response<AddressDTO>> AddCustomerAddress(string userId, AddressDTO addressDto);
-
         Task<Response<List<AddressDTO>>> GetAllAddressesAsync(string userId);
+
+        Task<Response<List<OrderDTO>>> GetAllOrdersAsync(string userId);
+        Task<Response<OrderDTO>> AddOrderAsync(string userId, OrderDTO orderDTO);
+
+        Task<Response<PaymentDTO>> AddPaymentAsync(string userId, PaymentDTO paymentDTO);
+        Task<Response<List<PaymentDTO>>> GetAllPaymentsAsync(string userId);
 
     }
 }

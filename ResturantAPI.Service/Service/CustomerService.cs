@@ -6,6 +6,7 @@ using ResturantAPI.Services.Dtos;
 using ResturantAPI.Services.Enums;
 using ResturantAPI.Services.IService;
 using ResturantAPI.Services.Model;
+using System.Net;
 
 namespace RestaurantAPI.Services
 {
@@ -36,7 +37,7 @@ namespace RestaurantAPI.Services
         {
             try
             {
-                Customer? customer = await _customerRepository.GetByUserIdAsync(userId, include: [ "Addresses", "User"], track: true);
+                Customer? customer = await _customerRepository.GetByUserIdAsync(userId,  [ "Addresses", "User"],  true);
                 if (customer == null)
                     return new Response<AddressDTO>
                     {
@@ -67,6 +68,84 @@ namespace RestaurantAPI.Services
                     Data = null,
                     Status = ResponseStatus.NotFound,
                     Message = "An error occurred while adding address."
+                };
+            }
+        }
+
+        public async Task<Response<OrderDTO>> AddOrderAsync(string userId,OrderDTO orderDTO)
+        {
+            try 
+            {
+                Customer? customer =await _customerRepository.GetByUserIdAsync(userId, ["Oreders"], true);
+                if (customer == null)
+                    return new Response<OrderDTO>
+                    {
+                        Data = null,
+                        Status = ResponseStatus.NotFound,
+                        Message = "Customer not found."
+                    };
+                Order order = _mapper.Map<Order>(orderDTO);
+                order.customerId = customer.Id;
+                customer.Orders.Add(order);
+
+                _unitOfWork.Customer.Update(customer);
+                await _unitOfWork.SaveAsync();
+
+                OrderDTO created = _mapper.Map<OrderDTO>(order);
+                return new Response<OrderDTO>
+                {
+                    Data = created,
+                    Status = ResponseStatus.Success,
+                    Message = "Order added successfully."
+                };
+            }
+            catch(Exception ex) 
+            {
+                return new Response<OrderDTO>
+                {
+                    Data = null,
+                    Status = ResponseStatus.NotFound,
+                    Message = "An error occurred while adding Order."
+                };
+            }
+        }
+
+        public async Task<Response<PaymentDTO>> AddPaymentAsync(string userId, PaymentDTO paymentDTO)
+        {
+            try 
+            {
+                Customer? customer = await _customerRepository.GetByUserIdAsync(userId, ["Payments"], true); 
+                if(customer == null)
+                {
+                    return new Response<PaymentDTO>
+                    {
+                        Data = null,
+                        Status = ResponseStatus.NotFound,
+                        Message = "Customer not found."
+                    };
+                }
+             Payment newPayment = _mapper.Map<Payment>(paymentDTO);
+
+                customer.Payments.Add(newPayment);
+                newPayment.CustomerId = customer.Id;
+
+                _unitOfWork.Customer.Update(customer);
+                await _unitOfWork.SaveAsync();
+
+                return new Response<PaymentDTO>
+                {
+                    Data= paymentDTO,
+                    Status=ResponseStatus.Success,
+                    Message = "Payment added successfully."
+                };
+
+            }catch(Exception ex) 
+            {
+                return new Response<PaymentDTO>
+                {
+                    Data = null,
+                    Status = ResponseStatus.NotFound,
+                    Message = "An error occurred while adding Order."
                 };
             }
         }
@@ -136,6 +215,79 @@ namespace RestaurantAPI.Services
                 Message = "Addresses retrieved successfully"
             };
 
+        }
+
+        public async Task<Response<List<OrderDTO>>> GetAllOrdersAsync(string userId)
+        {
+            try 
+            {
+                Customer? customer =await _customerRepository.GetByUserIdAsync(userId, ["Orders"]);
+                if(customer == null)
+                {
+                    return new Response<List<OrderDTO>>
+                    {
+                        Data=null,
+                        Status=ResponseStatus.NotFound,
+                        Message= "Customer not found"
+                    };
+                }
+         
+                List<OrderDTO> orderDTOs =  _mapper.Map<List<OrderDTO>>(customer.Orders);
+
+                return new Response<List<OrderDTO>>
+                {
+                    Data = orderDTOs,
+                    Status = ResponseStatus.Success,
+                    Message = "Orders retrieved successfully"
+                };
+
+            }catch(Exception ex) 
+            {
+                return new Response<List<OrderDTO>>
+                {
+                    Data = null,
+                    Status = ResponseStatus.NotFound,
+                    Message = "An error occurred while retrieving Orders."
+                };
+
+            }
+        }
+
+        public async Task<Response<List<PaymentDTO>>> GetAllPaymentsAsync(string userId)
+        {
+            try
+            {
+                Customer? customer = await _customerRepository.GetByUserIdAsync(userId, ["Payments"]);
+                if (customer == null)
+                {
+                    return new Response<List<PaymentDTO>>
+                    {
+                        Data = null,
+                        Status = ResponseStatus.NotFound,
+                        Message = "Customer not found"
+                    };
+                }
+
+                List<PaymentDTO> PaymentDTOs = _mapper.Map<List<PaymentDTO>>(customer.Payments);
+
+                return new Response<List<PaymentDTO>>
+                {
+                    Data = PaymentDTOs,
+                    Status = ResponseStatus.Success,
+                    Message = "Payments retrieved successfully"
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<List<PaymentDTO>>
+                {
+                    Data = null,
+                    Status = ResponseStatus.NotFound,
+                    Message = "An error occurred while retrieving Payments."
+                };
+
+            }
         }
 
         public async Task<Response<CustomerDTO>> GetCustomerById(int id)
@@ -268,5 +420,7 @@ namespace RestaurantAPI.Services
 
             }
         }
+
+
     }
 }

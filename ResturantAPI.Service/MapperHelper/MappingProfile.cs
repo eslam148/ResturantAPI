@@ -27,10 +27,13 @@ namespace ResturantAPI.Services.MapperHelper
 
            
             CreateMap<Payment, PaymentDTO>()
-                .ForMember(dest => dest.CreditCardNumber, opt => opt.MapFrom(src => "**** **** **** " + src.CreditCardNumber.Substring(src.CreditCardNumber.Length - 4)));
+                .ForMember(dest => dest.CreditCardNumber, opt => opt.MapFrom(src => "**** **** **** " + src.CreditCardNumber.Substring(src.CreditCardNumber.Length - 4)))
+                .ReverseMap();
+
             CreateMap<Order, OrderDTO>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.paymentMethod.ToString()));
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.paymentMethod.ToString()))
+                .ReverseMap();
 
             CreateMap<CustomerUpdateDTO, Customer>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => new ApplicationUser
@@ -41,8 +44,9 @@ namespace ResturantAPI.Services.MapperHelper
             }));
 
             CreateMap<Address, AddressDTO>().ReverseMap();
-       
-        
+
+            CreateMap<Restaurant, RestaurantDTO>().ReverseMap();
+
         }
     }
 }

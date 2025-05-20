@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ResturantAPI.Domain.Entities;
 using ResturantAPI.Domain.Interface;
 using ResturantAPI.Services.Dtos;
@@ -19,10 +20,12 @@ namespace ResturantAPI.API.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IRestaurantService _restaurantService;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, IRestaurantService restaurantService)
         {
             _customerService = customerService;
+            _restaurantService = restaurantService;
         }
 
         //api/Customer/Profile
@@ -82,22 +85,26 @@ namespace ResturantAPI.API.Controllers
         public async Task<Response<AddressDTO>> AddAddress([FromBody] AddressDTO dto)
         {
             if (!ModelState.IsValid)
+            {
                 return new Response<AddressDTO>
                 {
                     Data = null,
                     Status = ResponseStatus.NoContent,
-                    Message = "Invalid address data."
+                    Message = string.Join("; ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage))
                 };
-
+            }
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
+            {
                 return new Response<AddressDTO>
                 {
                     Data = null,
                     Status = ResponseStatus.Unauthorized,
                     Message = "User not authenticated."
                 };
-
+            }
             return await _customerService.AddCustomerAddress(userId, dto);
 
         }
@@ -118,6 +125,112 @@ namespace ResturantAPI.API.Controllers
 
              return await _customerService.GetAllAddressesAsync(userId);
            
+        }
+
+        [HttpPost("order")]
+        public async Task<Response<OrderDTO>> AddOrder([FromBody] OrderDTO orderDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new Response<OrderDTO>
+                {
+                    Data = null,
+                    Status = ResponseStatus.NoContent,
+                    Message = string.Join("; ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage))
+                };
+            }
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(string.IsNullOrEmpty(userId))
+            {
+                return new Response<OrderDTO>
+                {
+                    Data = null,
+                    Status = ResponseStatus.Unauthorized,
+                    Message = "User not authenticated."
+                };
+            }
+            return await _customerService.AddOrderAsync(userId, orderDto);
+
+        }
+
+        [HttpGet("orders")]
+        public async Task<Response<List<OrderDTO>>> GetAllOrders()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new Response<List<OrderDTO>>
+                {
+                    Data = null,
+                    Status = ResponseStatus.Unauthorized,
+                    Message = "User is not authenticated"
+                };
+            }
+            return await _customerService.GetAllOrdersAsync(userId);
+        }
+
+        [HttpPost("Payment")]
+        public async Task<Response<PaymentDTO>> AddPayment([FromBody] PaymentDTO paymentDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new Response<PaymentDTO>
+                {
+                    Data = null,
+                    Status = ResponseStatus.NoContent,
+                    Message = string.Join(";", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage))
+                };
+            }
+                string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return new Response<PaymentDTO>
+                    {
+                        Data = null,
+                        Status = ResponseStatus.Unauthorized,
+                        Message = "User not authenticated."
+                    };
+                }
+
+            return await _customerService.AddPaymentAsync(userId, paymentDTO);
+            
+        }
+
+        [HttpGet("Payments")]
+        public async Task<Response<List<PaymentDTO>>> GetAllPayments()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new Response<List<PaymentDTO>>
+                {
+                    Data = null,
+                    Status = ResponseStatus.Unauthorized,
+                    Message = "User is not authenticated"
+                };
+            }
+            return await _customerService.GetAllPaymentsAsync(userId);
+        }
+
+        [HttpGet("restaurants")]
+        public async Task<Response<List<RestaurantDTO>>> GetAllRestaurants()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new Response<List<RestaurantDTO>>
+                {
+                    Data = null,
+                    Status = ResponseStatus.Unauthorized,
+                    Message = "User is not authenticated."
+                };
+            }
+
+           return await _restaurantService.GetAllRestaurants();
         }
     }
 }

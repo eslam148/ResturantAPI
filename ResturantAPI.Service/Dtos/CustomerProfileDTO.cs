@@ -15,5 +15,6 @@ namespace ResturantAPI.Services.Dtos
         public string PhoneNumber { get; set; }
         public List<AddressDTO> Addresses { get; set; }
         public List<PaymentMethodDTO> Payments { get; set; }
+        public List<OrderDTO> Orders { get; set; }
     }
 }
